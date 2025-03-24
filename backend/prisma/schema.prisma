@@ -1,0 +1,87 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String      @id @default(uuid())
+  email      String      @unique
+  password   String
+  name       String?
+  testSuites TestSuite[]
+  testRuns   TestRun[]
+}
+
+model TestProject {
+  id Int @id @default(autoincrement())
+}
+
+model TestSuite {
+  id          String     @id @default(uuid())
+  name        String
+  description String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  ownerId     String
+  owner       User       @relation(fields: [ownerId], references: [id])
+  testCases   TestCase[]
+}
+
+model TestCase {
+  id           String          @id @default(uuid())
+  title        String
+  description  String?
+  steps        String // Markdown or plain text
+  expected     String
+  tags         String[] // Optional array of strings
+  suiteId      String
+  suite        TestSuite       @relation(fields: [suiteId], references: [id])
+  automationId String? // Optional reference to automation
+  jiraLinks    JiraIssueLink[]
+  TestResult   TestResult[]
+}
+
+model TestRun {
+  id          String       @id @default(uuid())
+  name        String
+  createdAt   DateTime     @default(now())
+  startedBy   User         @relation(fields: [startedById], references: [id])
+  startedById String
+  results     TestResult[]
+}
+
+model TestResult {
+  id         String     @id @default(uuid())
+  testCaseId String
+  testCase   TestCase   @relation(fields: [testCaseId], references: [id])
+  testRunId  String
+  testRun    TestRun    @relation(fields: [testRunId], references: [id])
+  status     TestStatus
+  notes      String?
+  executedAt DateTime   @default(now())
+}
+
+model JiraIssueLink {
+  id         String   @id @default(uuid())
+  testCaseId String
+  testCase   TestCase @relation(fields: [testCaseId], references: [id])
+  issueKey   String // e.g. "QA-123"
+  url        String
+}
+
+enum TestStatus {
+  PASS
+  FAIL
+  BLOCKED
+  SKIPPED
+}

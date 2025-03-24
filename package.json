@@ -1,0 +1,14 @@
+{
+  "name": "stm",
+  "version": "1.0.0",
+  "scripts": {
+    "client": "",
+    "server": "",
+    "dev": "concurrently \"npm run dev --prefix frontend\" \"npm run start:dev --prefix backend\" ",
+    "install-deps": ""
+  },
+  "dependencies": {
+    "concurrently": "^9.1.2"
+  },
+  "private": true
+}
