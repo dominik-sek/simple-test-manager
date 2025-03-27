@@ -1,6 +1,7 @@
 import {LeftPanel} from "./left-panel/LeftPanel.tsx";
 import {MainContent} from "./main-content/MainContent.tsx";
 import {RightPanel} from "./right-panel/RightPanel.tsx";
+import {ScreenSizeWidget} from "./components/shared/ScreenSizeWIdget.tsx";
 
 export const App = () => {
     return (
@@ -10,6 +11,7 @@ export const App = () => {
                 <MainContent />
                 <RightPanel />
             </div>
+            <ScreenSizeWidget />
         </div>
     )
 }
