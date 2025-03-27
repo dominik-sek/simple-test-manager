@@ -40,8 +40,6 @@ export const LeftPanel = () =>{
         <Panel>
             <User />
 
-
-
             {/*<Shortcuts>*/}
             {/*    */}
             {/*</Shortcuts>*/}
