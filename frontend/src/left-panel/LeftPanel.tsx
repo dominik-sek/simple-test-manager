@@ -48,7 +48,7 @@ export const LeftPanel = () =>{
                 <span className={"text-zinc-400 cursor-default"}>Dashboard</span>
                 {
                     menuButtons.map((button, idx)=>{
-                        return <MenuButton key={idx} menuButtons={button.children}>{button.button}</MenuButton>
+                        return <MenuButton key={idx} icon={button.icon} menuButtons={button.children}>{button.button}</MenuButton>
                     })
                 }
             </ul>
