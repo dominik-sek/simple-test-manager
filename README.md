@@ -72,4 +72,4 @@ CRUD + clone:
 PostgreSQL
 
 ER diagram:
-![ER]("./ER.png")
+![ER](ER.png)
