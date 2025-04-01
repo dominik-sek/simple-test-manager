@@ -21,6 +21,9 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
         // @ts-ignore
         this.$on('query' as any, async (e: any) => {
             this.logger.debug(`(${e.duration}ms) ${e.query}`);
+            if (e.duration > 50) {
+                this.logger.warn(`Slow query (${e.duration}ms): ${e.query}`);
+            }
         });
     }
     async onModuleDestroy() {
