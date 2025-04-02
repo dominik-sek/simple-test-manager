@@ -1,4 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+  Logger,
+  HttpException,
+  HttpStatus,
+  ConflictException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import {PrismaService} from "../prisma/prisma.service";
@@ -7,23 +15,101 @@ import {PrismaService} from "../prisma/prisma.service";
 export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  async create(createUserDto: CreateUserDto) {
+    const now = new Date().toISOString();
+    const user = await this.prisma.user.create({
+      data:{
+        ...createUserDto,
+        created_at: now
+      }
+    })
+    if(!user) {
+      throw new BadRequestException(``);
+    }
+
+    return user;
   }
 
-  findAll() {
-    return `This action returns all user`;
+  async findAll() {
+    const users = await this.prisma.user.findMany({
+      omit: {
+        password: true
+      }
+    })
+    return users;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: number) {
+    //todo: return user projects etc..?
+    if(!id){
+      console.log('no id')
+      throw new BadRequestException('User ID is required');
+    }
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id: id
+      },
+      omit:{
+        password:true,
+      }
+    })
+    if(!user) {
+      throw new NotFoundException(`User with id ${id} not found`);
+    }
+
+    return user;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    if(!id){
+      throw new BadRequestException('User ID is required');
+    }
+    const user = await this.prisma.user.update({
+      where:{
+        id: id
+      },
+      data:updateUserDto
+    })
+    if(!user) {
+      throw new NotFoundException(`User with id ${id} not found`);
+    }
+    return user;
   }
+  async deactivate(id: number) {
+    if(!id) {
+      throw new BadRequestException(`User ID is required`);
+    }
+    const user = await this.prisma.user.findUnique({
+      where:{
+        id:id
+      }
+    })
+    if(!user) {
+      throw new NotFoundException(`User with id ${id} not found`);
+    }
+    if(!user.is_active){
+      throw new ConflictException('User is not active');
+    }
 
+    const userEdit = await this.prisma.user.update({
+      where:{
+        id:id
+      },
+      data:{
+        is_active: false
+      },
+      select:{
+        is_active: true
+      }
+    })
+
+    return userEdit
+  }
   remove(id: number) {
-    return `This action removes a #${id} user`;
+    // this.prisma.user.delete({
+    //   where: {
+    //     id: id
+    //   }
+    // })
   }
 }
