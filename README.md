@@ -73,3 +73,7 @@ PostgreSQL
 
 ER diagram:
 ![ER](ER.png)
+
+
+update nest packages:
+```npm-check-updates "/nestjs*/" -u```

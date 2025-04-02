@@ -8,55 +8,68 @@ datasource db {
 }
 
 model test_case {
-  id                        String                      @id @db.VarChar(255)
-  test_collection_id        String?                     @db.VarChar(255)
+  id                        Int                         @id @default(autoincrement())
   name                      String?                     @db.VarChar(255)
   description               String?                     @db.VarChar(255)
   status                    test_status?
-  parameters                String[]                    @db.VarChar(255)
+  parameters                Json?
   test_case_run             test_case_run[]
   test_collection_test_case test_collection_test_case[]
   test_step                 test_step[]
 }
 
 model test_case_run {
-  id            String          @id @db.VarChar(255)
-  test_case_id  String?         @db.VarChar(255)
-  test_run_id   String?         @db.VarChar(255)
+  id            Int             @id @default(autoincrement())
+  test_case_id  Int
+  test_run_id   Int
   status        test_status?
-  test_case     test_case?      @relation(fields: [test_case_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  test_run      test_run?       @relation(fields: [test_run_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  test_case     test_case       @relation(fields: [test_case_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  test_run      test_run        @relation(fields: [test_run_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   test_step_run test_step_run[]
 }
 
 model test_collection {
-  id                        String                      @id @db.VarChar(255)
+  id                        Int                         @id @default(autoincrement())
   name                      String?                     @db.VarChar(255)
   description               String?                     @db.VarChar(255)
   test_collection_test_case test_collection_test_case[]
-  test_project              test_project[]
+  test_project_collection   test_project_collection[]
 }
 
 model test_collection_test_case {
-  test_collection_id String          @db.VarChar(255)
-  test_case_id       String          @db.VarChar(255)
+  id                 Int             @id @default(autoincrement())
+  test_collection_id Int
+  test_case_id       Int
   test_case          test_case       @relation(fields: [test_case_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   test_collection    test_collection @relation(fields: [test_collection_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-
-  @@id([test_collection_id, test_case_id])
 }
 
 model test_project {
-  id                 String           @id @db.VarChar(255)
-  name               String           @unique @db.VarChar(255)
-  user_id            String?          @db.VarChar(255)
-  test_collection_id String?          @db.VarChar(255)
+  id                      Int                       @id @default(autoincrement())
+  name                    String                    @unique @db.VarChar(255)
+  description             String?                   @db.VarChar(255)
+  test_project_collection test_project_collection[]
+  test_project_user       test_project_user[]
+}
+
+model test_project_collection {
+  id                 Int              @id @default(autoincrement())
+  test_project_id    Int?
+  test_collection_id Int?
   test_collection    test_collection? @relation(fields: [test_collection_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  user               user?            @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  test_project       test_project?    @relation(fields: [test_project_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model test_project_user {
+  id              Int          @id @default(autoincrement())
+  user_id         Int
+  test_project_id Int
+  test_project    test_project @relation(fields: [test_project_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  user            user         @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model test_run {
-  id            String          @id @db.VarChar(255)
+  id            Int             @id @default(autoincrement())
   name          String?         @db.VarChar(255)
   started_at    DateTime?       @db.Timestamp(6)
   finished_at   DateTime?       @db.Timestamp(6)
@@ -64,35 +77,38 @@ model test_run {
 }
 
 model test_step {
-  id               String          @id @db.VarChar(255)
-  test_case_id     String?         @db.VarChar(255)
-  step_actions     String?         @db.VarChar(255)
-  expected_results String?         @db.VarChar(255)
-  test_case        test_case?      @relation(fields: [test_case_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  id               Int             @id @default(autoincrement())
+  test_case_id     Int
+  step_actions     String?         @db.VarChar(1024)
+  expected_results String?         @db.VarChar(1024)
+  test_case        test_case       @relation(fields: [test_case_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   test_step_run    test_step_run[]
 }
 
 model test_step_run {
-  id               String            @id @db.VarChar(255)
-  test_step_id     String?           @db.VarChar(255)
-  test_case_run_id String?           @db.VarChar(255)
-  actual_results   String?           @db.VarChar(255)
+  id               Int               @id @default(autoincrement())
+  test_step_id     Int
+  test_case_run_id Int
+  user_id          Int
+  actual_results   String?           @db.VarChar(1024)
   status           test_step_status?
-  test_case_run    test_case_run?    @relation(fields: [test_case_run_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  test_step        test_step?        @relation(fields: [test_step_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  test_case_run    test_case_run     @relation(fields: [test_case_run_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  test_step        test_step         @relation(fields: [test_step_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  user             user              @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model user {
-  id           String         @id @db.VarChar(255)
-  username     String         @db.VarChar(255)
-  password     String         @db.VarChar(255)
-  role         String         @default("user") @db.VarChar(15)
-  full_name    String?        @db.VarChar(255)
-  email        String         @unique @db.VarChar(128)
-  created_at   DateTime?      @db.Timestamp(6)
-  last_login   DateTime?      @db.Timestamp(6)
-  reset_token  String?        @db.VarChar(255)
-  test_project test_project[]
+  id                Int                 @id @default(autoincrement())
+  username          String?             @db.VarChar(255)
+  password          String?             @db.VarChar(255)
+  role              String?             @default("user") @db.VarChar(15)
+  full_name         String?             @db.VarChar(255)
+  email             String?             @unique @db.VarChar(128)
+  created_at        DateTime?           @db.Timestamp(6)
+  last_login        DateTime?           @db.Timestamp(6)
+  is_active         Boolean?
+  test_project_user test_project_user[]
+  test_step_run     test_step_run[]
 }
 
 enum test_status {
