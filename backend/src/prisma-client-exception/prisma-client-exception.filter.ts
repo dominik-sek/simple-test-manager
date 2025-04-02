@@ -15,7 +15,17 @@ export class PrismaClientExceptionFilter extends BaseExceptionFilter {
         //@ts-ignore
         response.status(status).json({
           statusCode: status,
-          message: exception.meta?.cause || exception.message,
+          message: exception.meta?.cause || message,
+          errorCode: exception.code
+        });
+        break;
+      }
+      case 'P2002':{
+        const status = HttpStatus.CONFLICT;
+        //@ts-ignore
+        response.status(status).json({
+          statusCode: status,
+          message: exception.meta?.cause || message,
           errorCode: exception.code
         });
         break;
@@ -23,6 +33,5 @@ export class PrismaClientExceptionFilter extends BaseExceptionFilter {
       default:
         super.catch(exception, host)
     }
-
   }
 }
