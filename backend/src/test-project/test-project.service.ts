@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTestProjectDto } from './dto/create-test-project.dto';
 import { UpdateTestProjectDto } from './dto/update-test-project.dto';
 import {PrismaService} from "../prisma/prisma.service";
@@ -7,23 +7,54 @@ import {PrismaService} from "../prisma/prisma.service";
 export class TestProjectService {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(createTestProjectDto: CreateTestProjectDto) {
-    return 'This action adds a new testProject';
+  async create(createTestProjectDto: CreateTestProjectDto) {
+    //need to get user id, then create inside joined table i think?
+    return this.prisma.test_project.create({
+      data: createTestProjectDto
+    })
   }
 
-  findAll() {
-    return `This action returns all testProject`;
+  async findAll() {
+    return this.prisma.test_project.findMany()
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} testProject`;
+  async findOne(id: number) {
+    if(!id) throw new BadRequestException('Project ID is required');
+    const project = await this.prisma.test_project.findUnique({
+      where:{
+        id: id
+      }
+    })
+    if(!project) throw new NotFoundException('Project not found');
+    return project
   }
 
-  update(id: number, updateTestProjectDto: UpdateTestProjectDto) {
-    return `This action updates a #${id} testProject`;
+  async update(id: number, updateTestProjectDto: UpdateTestProjectDto) {
+    if(!id) throw new BadRequestException('Project ID is required');
+    const updatedProject = await this.prisma.test_project.update({
+      where:{
+        id: id
+      },
+      data: updateTestProjectDto
+    })
+    if(!updatedProject) throw new NotFoundException('Project not found');
+    return updatedProject
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} testProject`;
+  async remove(id: number) {
+
+    if(!id) throw new BadRequestException('Project ID is required'); //todo: handle prisma errors
+    const projectToDelete = await this.prisma.test_project.findUnique({
+      where:{
+        id:id
+      }
+    })
+    if(!projectToDelete) throw new NotFoundException('Project not found');
+
+    return this.prisma.test_project.delete({
+      where:{
+        id: id
+      }
+    })
   }
 }

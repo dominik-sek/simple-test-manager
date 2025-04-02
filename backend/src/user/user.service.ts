@@ -76,20 +76,15 @@ export class UserService {
     return user;
   }
   async deactivate(id: number) {
-    if(!id) {
-      throw new BadRequestException(`User ID is required`);
-    }
+    if(!id) throw new BadRequestException(`User ID is required`);
     const user = await this.prisma.user.findUnique({
       where:{
         id:id
       }
     })
-    if(!user) {
-      throw new NotFoundException(`User with id ${id} not found`);
-    }
-    if(!user.is_active){
-      throw new ConflictException('User is not active');
-    }
+    if(!user) throw new NotFoundException(`User with id ${id} not found`);
+    if(!user.is_active) throw new ConflictException('User is not active');
+
 
     const userEdit = await this.prisma.user.update({
       where:{
@@ -102,7 +97,7 @@ export class UserService {
         is_active: true
       }
     })
-
+    if(!userEdit) throw new NotFoundException('User not found');
     return userEdit
   }
   remove(id: number) {
