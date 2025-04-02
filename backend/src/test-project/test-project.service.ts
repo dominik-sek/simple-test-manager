@@ -44,12 +44,12 @@ export class TestProjectService {
   async remove(id: number) {
 
     if(!id) throw new BadRequestException('Project ID is required'); //todo: handle prisma errors
-    const projectToDelete = await this.prisma.test_project.findUnique({
-      where:{
-        id:id
-      }
-    })
-    if(!projectToDelete) throw new NotFoundException('Project not found');
+    // const projectToDelete = await this.prisma.test_project.findUnique({
+    //   where:{
+    //     id:id
+    //   }
+    // })
+    // if(!projectToDelete) throw new NotFoundException('Project not found');
 
     return this.prisma.test_project.delete({
       where:{
