@@ -22,8 +22,24 @@ export class TestCollectionService {
     return this.prisma.test_collection.findUniqueOrThrow({
       where: {
         id: id
+      },
+      include:{
+        test_collection_test_case:true,
+        test_project_collection: true,
       }
     })
+  }
+  addCases(collectionId: number, testCaseIds: number[]) {
+    const data = testCaseIds.map((test_case_id)=>({
+      test_collection_id: collectionId,
+      test_case_id: test_case_id,
+    }))
+
+    return this.prisma.test_collection_test_case.createMany({
+      data,
+      skipDuplicates: true
+    })
+
   }
 
   update(id: number, updateTestCollectionDto: UpdateTestCollectionDto) {

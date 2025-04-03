@@ -45,6 +45,9 @@ export class UserService {
       },
       omit:{
         password:true,
+      },
+      include:{
+        test_project_user: true
       }
     })
   }

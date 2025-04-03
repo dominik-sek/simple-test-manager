@@ -23,6 +23,10 @@ export class TestProjectService {
     return this.prisma.test_project.findUniqueOrThrow({
       where:{
         id: id
+      },
+      include:{
+        test_project_user:true,
+        test_project_collection: true
       }
     })
   }

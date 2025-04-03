@@ -22,6 +22,9 @@ export class TestRunService {
     return this.prisma.test_run.findUniqueOrThrow({
       where:{
         id:id
+      },
+      include:{
+        test_case_run: true
       }
     })
   }
