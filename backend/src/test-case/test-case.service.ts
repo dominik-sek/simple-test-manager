@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTestCaseDto } from './dto/create-test-case.dto';
 import { UpdateTestCaseDto } from './dto/update-test-case.dto';
 import {PrismaService} from "../prisma/prisma.service";
@@ -8,23 +8,39 @@ export class TestCaseService {
   constructor(private readonly prisma: PrismaService) {}
 
   create(createTestCaseDto: CreateTestCaseDto) {
-
-    return 'This action adds a new testCase';
+    return this.prisma.test_case.create({
+      data: createTestCaseDto
+    })
   }
 
   findAll() {
-    return `This action returns all testCase`;
+    return this.prisma.test_case.findMany()
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} testCase`;
+    if(!id) throw new NotFoundException('test case not found');
+    return this.prisma.test_case.findUniqueOrThrow({
+      where:{
+        id: id
+      }
+    })
   }
 
   update(id: number, updateTestCaseDto: UpdateTestCaseDto) {
-    return `This action updates a #${id} testCase`;
+    return this.prisma.test_case.update({
+      where:{
+        id:id
+      },
+      data: updateTestCaseDto
+    })
   }
 
   remove(id: number) {
-    return `This action removes a #${id} testCase`;
+    if(!id) throw new NotFoundException('test case not found');
+    return this.prisma.test_case.delete({
+      where:{
+        id:id
+      }
+    })
   }
 }
