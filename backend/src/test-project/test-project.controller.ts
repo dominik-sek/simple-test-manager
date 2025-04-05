@@ -2,11 +2,13 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { TestProjectService } from './test-project.service';
 import { CreateTestProjectDto } from './dto/create-test-project.dto';
 import { UpdateTestProjectDto } from './dto/update-test-project.dto';
+import { Roles } from '../decorators/roles.decorator';
 
 @Controller('test-project')
 export class TestProjectController {
   constructor(private readonly testProjectService: TestProjectService) {}
 
+  @Roles(['admin'])
   @Post()
   create(@Body() createTestProjectDto: CreateTestProjectDto) {
     return this.testProjectService.create(createTestProjectDto);

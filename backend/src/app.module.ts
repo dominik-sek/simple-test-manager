@@ -12,10 +12,37 @@ import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
+import { RolesGuard } from './guards/roles.guard';
 
 @Module({
-  imports: [ConfigModule.forRoot(), UserModule, TestProjectModule, TestCollectionModule, TestCaseModule, TestStepModule, TestRunModule, PrismaModule, AuthModule],
+  imports: [
+    ConfigModule.forRoot(),
+    UserModule,
+    TestProjectModule,
+    TestCollectionModule,
+    TestCaseModule,
+    TestStepModule,
+    TestRunModule,
+    PrismaModule,
+    AuthModule,
+    ConfigModule.forRoot({
+      envFilePath:'.env',
+      isGlobal: true
+    })
+  ],
+
   controllers: [AppController],
-  providers: [AppService, {provide: APP_GUARD, useClass: JwtAuthGuard}],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
+
+  ],
 })
 export class AppModule {}
