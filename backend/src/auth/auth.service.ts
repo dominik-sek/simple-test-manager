@@ -5,6 +5,7 @@ import { LoginUserDto } from './dto/login-user.dto';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { JwtService } from '@nestjs/jwt';
 import { user } from '@prisma/client'
+import { JwtPayload } from './interfaces/jwt-payload.interface';
 
 @Injectable()
 export class AuthService {
@@ -27,16 +28,26 @@ export class AuthService {
     return results
   }
 
+  async getById(id: number) {
+    return this.userService.findOne(id)
+  }
+
   async login (user: any){
-    const payload = {
+    const payload: JwtPayload = {
       sub: user.id,
       email: user.email,
       role: user.role
     }
     const now = new Date().toISOString();
+
     await this.userService.update(user.id, {last_login: now})
-    return this.jwtService.sign(payload)
+
+    return {
+      access_token: this.jwtService.sign(payload)
+    }
+
   }
+
 
 
   logout(id: number) {
