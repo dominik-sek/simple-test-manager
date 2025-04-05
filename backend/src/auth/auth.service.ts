@@ -4,6 +4,7 @@ import { UserService } from '../user/user.service';
 import { LoginUserDto } from './dto/login-user.dto';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { JwtService } from '@nestjs/jwt';
+import { user } from '@prisma/client'
 
 @Injectable()
 export class AuthService {
@@ -15,22 +16,28 @@ export class AuthService {
     user.password = await bcrypt.hash(user.password, saltOrRounds);
 
     throw new Error('Method not implemented');
-
   }
 
-  async validateUser({ email, password }: LoginUserDto) {
-
-    const user = await this.userService._findOneWithPasswordByEmail(email)
-    if(!user) throw new UnauthorizedException('Invalid credentials');
-
-    const passwordMatch = bcrypt.compare(password, user.password)
+  async validateUser(loginUserDto: LoginUserDto) {
+    const user = await this.userService._findOneWithPasswordByEmail(loginUserDto.email)
+    const passwordMatch = await bcrypt.compare(loginUserDto.password, user.password)
     if(!passwordMatch) throw new UnauthorizedException('Username or password is incorrect');
 
-    return this.jwtService.sign({payload: user.id})
-    //return jwt with role?
-
-    //return this.authService.findAll();
+    const {password, ...results} = user;
+    return results
   }
+
+  async login (user: any){
+    const payload = {
+      sub: user.id,
+      email: user.email,
+      role: user.role
+    }
+    const now = new Date().toISOString();
+    await this.userService.update(user.id, {last_login: now})
+    return this.jwtService.sign(payload)
+  }
+
 
   logout(id: number) {
     throw new Error('Method not implemented');

@@ -1,24 +1,19 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { Controller, Post, UseGuards, Req, UnauthorizedException } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { UserService } from '../user/user.service';
-import { CreateUserDto } from '../user/dto/create-user.dto';
-import { LoginUserDto } from './dto/login-user.dto';
+import { LocalAuthGuard } from './guards/local-auth.guard';
+import {Request} from 'express';
+import { Public } from 'src/decorators/public.decorator';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService, private readonly userService: UserService) {}
+  constructor(private readonly authService: AuthService) {}
 
-  // @Post()
-  // async register(@Body() createUserDto: CreateUserDto) {
-  //   //return this.authService.create(createAuthDto);
-  // }
 
+  @Public()
   @Post('login')
-  async login(@Body() loginUserDto: LoginUserDto) {
-    return this.authService.validateUser(loginUserDto)
+  @UseGuards(LocalAuthGuard)
+  async login(@Req() req: Request) {
+    if(!req.user) throw new UnauthorizedException('Invalid credentials');
+    return this.authService.login(req.user)
   }
-
-  // @Get(':id')
-  // logout(@Param('id') id: string) {
-  // }
 }
