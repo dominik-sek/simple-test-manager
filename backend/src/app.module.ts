@@ -9,9 +9,10 @@ import { TestCaseModule } from './test-case/test-case.module';
 import { TestStepModule } from './test-step/test-step.module';
 import { TestRunModule } from './test-run/test-run.module';
 import { PrismaModule } from './prisma/prisma.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [ConfigModule.forRoot(), UserModule, TestProjectModule, TestCollectionModule, TestCaseModule, TestStepModule, TestRunModule, PrismaModule],
+  imports: [ConfigModule.forRoot(), UserModule, TestProjectModule, TestCollectionModule, TestCaseModule, TestStepModule, TestRunModule, PrismaModule, AuthModule],
   controllers: [AppController],
   providers: [AppService],
 })

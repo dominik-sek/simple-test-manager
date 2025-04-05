@@ -10,13 +10,17 @@ import {
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import {PrismaService} from "../prisma/prisma.service";
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(createUserDto: CreateUserDto) {
+    const hash = bcrypt.hash(createUserDto.password, 10);
+    createUserDto.password = await hash;
     const now = new Date().toISOString();
+
     return this.prisma.user.create({
       data:{
         ...createUserDto,
@@ -39,15 +43,22 @@ export class UserService {
   async findOne(id: number) {
     //todo: return user projects etc..?
     if(!id) throw new BadRequestException('User ID is required');
-    return this.prisma.user.findUniqueOrThrow({
+    const user = await this.prisma.user.findUniqueOrThrow({
       where: {
         id: id
       },
-      omit:{
-        password:true,
-      },
       include:{
         test_project_user: true
+      }
+    })
+    const { password, ...result } = user
+    return result
+  }
+
+  async _findOneWithPasswordByEmail(email: string) {
+    return this.prisma.user.findUnique({
+      where: {
+        email: email
       }
     })
   }
