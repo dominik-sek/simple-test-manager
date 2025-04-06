@@ -11,6 +11,10 @@ async function bootstrap() {
 
   const {httpAdapter} = app.get(HttpAdapterHost)
   app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapter));
+  app.enableCors({
+    credentials: true,
+    origin: 'http://localhost:5173',
+  });
   const config = new DocumentBuilder()
     .setTitle('dupa')
     .setDescription('dupa')

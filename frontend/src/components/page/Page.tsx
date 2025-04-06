@@ -26,7 +26,7 @@ export default function Page(props: PageProps) {
 
           <h1 className='text-3xl font-bold text-slate-700'>{props.title}</h1>
           
-          <div className='flex flex-wrap gap-10 pb-10 bg-yellow-300'>
+          <div className='flex flex-wrap gap-10 pb-10 border'>
           {props.children}
           </div>
           

@@ -5,31 +5,54 @@ import TestRuns from '@/app/pages/runs/TestRuns';
 import AdminHome from '@/app/pages/admin/AdminHome';
 import Reports from '@/app/pages/reports/Reports';
 import Home from '@/app/pages/dashboard/Home';
+import LoginPage from '@/app/pages/login/LoginPage';
+import ProtectedRoutes from './ProtectedRoutes';
+import RoleProtectedRoutes from './RoleProtectedRoutes';
 
 export const router = createBrowserRouter([
   {
-    path: '/',
-    element: <Home />,
+    path: '/login',
+    element: <LoginPage />
   },
   {
-    path: '/projects',
-    element: <TestProjects />
+    path: '/register',
+    element: <LoginPage />
   },
   {
-    path: '/cases',
-    element: <TestCases />
-  },
-  {
-    path: '/runs',
-    element: <TestRuns />
-  },
-  {
-    path: '/reports',
-    element: <Reports />
-  },
-  {
-    path: '/admin',
-    element: <AdminHome />
+    element: <ProtectedRoutes />,
+    children: [
+      {
+        path: '/',
+        element: <Home />,
+      },
+      {
+        path: '/projects',
+        element: <TestProjects />
+      },
+      {
+        path: '/cases',
+        element: <TestCases />
+      },
+      {
+        path: '/runs',
+        element: <TestRuns />
+      },
+      {
+        path: '/reports',
+        element: <Reports />
+      },
+      {
+        element: <RoleProtectedRoutes allowedRoles={['admin', 'tester']} />,
+        children: [
+          {
+            path: '/admin',
+            element: <AdminHome />
+          }
+        ]
+      }
+
+    ]
   }
+  
 
 ])

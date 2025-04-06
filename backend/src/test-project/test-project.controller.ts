@@ -8,7 +8,7 @@ import { Roles } from '../decorators/roles.decorator';
 export class TestProjectController {
   constructor(private readonly testProjectService: TestProjectService) {}
 
-  @Roles(['admin'])
+  //@Roles(['admin'])
   @Post()
   create(@Body() createTestProjectDto: CreateTestProjectDto) {
     return this.testProjectService.create(createTestProjectDto);

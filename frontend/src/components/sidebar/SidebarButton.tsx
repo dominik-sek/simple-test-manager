@@ -3,6 +3,7 @@ import { SidebarItem } from './sidebar-items';
 import { FaAngleDown } from "react-icons/fa6";
 import { Link } from 'react-router';
 import clsx from 'clsx';
+import { jwtDecode } from 'jwt-decode';
 
 interface SidebarButtonProps extends SidebarItem {
   isOpen: boolean;
@@ -10,7 +11,17 @@ interface SidebarButtonProps extends SidebarItem {
 }
 
 export default function SidebarButton(props: SidebarButtonProps) {
+  //check if user is allowed to see the button
+  const localStorageToken = localStorage.getItem("token");
+  const decoded = localStorageToken ? jwtDecode(localStorageToken) : null;
+  const isValidRole = (decoded: any) => {
+    
+    if (!decoded) return false; // If decoded is null, return false
+    if (!props.requiresRole) return true; // If no role is required, return true
+    if (!decoded.role) return false; // If no role is present in decoded, return false
 
+    return props.requiresRole ? props.requiresRole.includes(decoded.role) : true;
+  };
   const hasChildren = props.children ? true : false;
   const buttonClasses = clsx(`relative overflow-hidden
     h-12 w-full flex gap-3 p-2 rounded-md items-center font-bold text-slate-700
@@ -23,7 +34,7 @@ export default function SidebarButton(props: SidebarButtonProps) {
 
   const buttonContent = (
     <div
-      className={buttonClasses}
+      className={clsx(buttonClasses, { 'hidden': !isValidRole(decoded) })}
       onClick={!hasChildren ? undefined : props.onClick}>
 
       <props.icon size={24} />

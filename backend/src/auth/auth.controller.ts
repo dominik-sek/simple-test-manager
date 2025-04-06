@@ -12,6 +12,8 @@ export class AuthController {
   @Post('login')
   @UseGuards(LocalAuthGuard)
   async login(@Req() req: Request) {
+    console.log('LOGIN ATTEMPT:', req.user); // see if this is hit
+
     if(!req.user) throw new UnauthorizedException('Invalid credentials');
     return this.authService.login(req.user)
   }

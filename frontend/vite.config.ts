@@ -5,10 +5,21 @@ import path from "path";
 
 // https://vite.dev/config/
 export default defineConfig({
+  
   plugins: [react(), tailwindcss()],
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3000',
+        changeOrigin: true,
+        rewrite: path => path.replace(/^\/api/, ''), // optional: remove /api before forwarding
+      },
+    },
+  },
   resolve:{
     alias:{
       "@": path.resolve(__dirname, './src'),
-    }
+    },
+    
   }
 })
