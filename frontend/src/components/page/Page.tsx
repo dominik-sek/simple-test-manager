@@ -1,5 +1,6 @@
 import Navbar from '@/components/navbar/Navbar';
 import { Sidebar } from '@/components/sidebar/Sidebar';
+import Breadcrumbs from './Breadcrumbs';
 
 interface PageProps {
   children: React.ReactNode;
@@ -17,16 +18,11 @@ export default function Page(props: PageProps) {
 
         <div className='pt-14 px-14 gap-4 flex flex-col'>
 
-          <div className='flex items-center gap-2 text-slate-500 text-sm font-bold'>
-            <span className='text-palette-green'>{props.title}</span>
-            <span>/</span>
-            <span>Page</span>
-            
-          </div>
+          <Breadcrumbs />
 
           <h1 className='text-3xl font-bold text-slate-700'>{props.title}</h1>
           
-          <div className='flex flex-wrap gap-10 pb-10 border'>
+          <div className='flex flex-wrap gap-10 pb-10 '>
           {props.children}
           </div>
           

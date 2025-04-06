@@ -4,14 +4,14 @@ import Page from '@/components/page/Page';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 
-export default function TestProjects() {
+export default function TestProjectDetails() {
 
   const [testProject, setTestProject] = useState<any>(null);
 
   const params = useParams();
   console.log(params); // good for debugging
   useEffect(() => {
-    api('/test-project', { method: 'GET' })
+    api(`/test-project/${params.id}`, { method: 'GET' })
       .then((res) => {
         console.log(res); // good for debugging
         setTestProject(res); // <-- store it in state
@@ -24,12 +24,12 @@ export default function TestProjects() {
   return (
     <Page title={'Test projects'}>
       {
-        testProject && testProject.map((project: any) => {
-          return (
-            <DataCard key={project.id} title={project.name} description={project.description} icon={project.icon} href={`/projects/${project.id}`} />
+        testProject && 
+           (
+            <DataCard key={testProject.id} title={testProject.name} description={testProject.description} icon={testProject.icon} href={`/projects/${testProject.id}`} />
           )
-        })
-      }
+       }
+      
       
     </Page>
   )

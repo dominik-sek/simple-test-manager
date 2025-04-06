@@ -8,6 +8,7 @@ import Home from '@/app/pages/dashboard/Home';
 import LoginPage from '@/app/pages/login/LoginPage';
 import ProtectedRoutes from './ProtectedRoutes';
 import RoleProtectedRoutes from './RoleProtectedRoutes';
+import TestProjectDetails from '@/app/pages/projects/TestProjectDetails';
 
 export const router = createBrowserRouter([
   {
@@ -30,11 +31,22 @@ export const router = createBrowserRouter([
         element: <TestProjects />
       },
       {
+        path: '/projects/:id',
+        loader: async ({ params }) => {
+          return params.id;
+        },
+        element: <TestProjectDetails />
+      },
+      {
         path: '/cases',
         element: <TestCases />
       },
       {
         path: '/runs',
+        element: <TestRuns />
+      },
+      {
+        path: '/runs/new',
         element: <TestRuns />
       },
       {
