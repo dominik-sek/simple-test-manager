@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+@theme {
+  --color-palette-blue:rgb(45, 155, 218);
+  --color-palette-green: rgb(0, 176, 116);
+  --color-palette-gray:rgb(243, 242, 247);
+  --color-palette-red:rgb(253, 91, 91);
+  --color-palette-slate:rgb(166, 174, 195);
+  
+}

@@ -26,6 +26,7 @@ export const ScreenSizeWidget = () => {
 
             let currentSize = "sm";
             for (const key in tailwindSizes) {
+                // @ts-ignore
                 if (innerWidth >= tailwindSizes[key]) {
                     currentSize = key;
                 }
@@ -40,7 +41,7 @@ export const ScreenSizeWidget = () => {
     }, []); // Empty array — only set up listener once on mount
 
     return (
-        <div className="absolute bottom-0 left-0 w-64 h-32 text-3xl bg-black opacity-60 text-white p-2">
+        <div className="absolute bottom-0 left-0 w-64 h-32 text-3xl bg-black opacity-20 text-white p-2">
             <p>Screen Size:</p>
             <p>{screenSize.width} x {screenSize.height}</p>
             <p>{tailwindSize}</p>
