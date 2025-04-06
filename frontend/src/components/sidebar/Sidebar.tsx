@@ -5,8 +5,9 @@ import SidebarButton from './SidebarButton';
 
 export function Sidebar() {
   const [open, setOpen] = useState<number | null>(null);
+  
   const handleClick = (index: number) => {
-    setOpen(open === index ? null : index)
+    setOpen((prevOpen) => (prevOpen === index ? null : index));
   };
   return (
     <div className='p-8 pt-5 w-72 shadow-md flex flex-col bg-white gap-10 fixed top-0 left-0 h-screen overflow-auto'>
