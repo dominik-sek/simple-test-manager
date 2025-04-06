@@ -11,6 +11,17 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model user_log {
+  id        Int      @id @default(autoincrement())
+  user_id   Int?
+  action    String
+  result    String   @default("INFO")
+  metadata  Json?
+  createdAt DateTime @default(now())
+
+  user user? @relation(fields: [user_id], references: [id])
+}
+
 model test_case {
   id                        Int                         @id @default(autoincrement())
   name                      String?                     @db.VarChar(255)
@@ -113,8 +124,14 @@ model user {
   is_active         Boolean?
   test_project_user test_project_user[]
   test_step_run     test_step_run[]
-}
 
+  user_log user_log[]
+}
+enum user_log_result {
+  ERROR
+  INFO
+  WARNING
+}
 enum test_status {
   todo
   running

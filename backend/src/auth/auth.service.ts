@@ -4,7 +4,6 @@ import { UserService } from '../user/user.service';
 import { LoginUserDto } from './dto/login-user.dto';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { JwtService } from '@nestjs/jwt';
-import { user } from '@prisma/client'
 import { JwtPayload } from './interfaces/jwt-payload.interface';
 
 @Injectable()
@@ -22,16 +21,15 @@ export class AuthService {
   async validateUser(loginUserDto: LoginUserDto) {
     const user = await this.userService._findOneWithPasswordByEmail(loginUserDto.email)
     const passwordMatch = await bcrypt.compare(loginUserDto.password, user.password)
+    if(!user.is_active) throw new UnauthorizedException('User is disabled');
     if(!passwordMatch) throw new UnauthorizedException('Username or password is incorrect');
 
     const {password, ...results} = user;
     return results
   }
-
   async getById(id: number) {
     return this.userService.findOne(id)
   }
-
   async login (user: any){
     const payload: JwtPayload = {
       sub: user.id,

@@ -56,7 +56,7 @@ export class UserService {
   }
 
   async _findOneWithPasswordByEmail(email: string) {
-    return this.prisma.user.findUnique({
+    return this.prisma.user.findUniqueOrThrow({
       where: {
         email: email
       }
