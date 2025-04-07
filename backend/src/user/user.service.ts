@@ -94,4 +94,14 @@ export class UserService {
     })
   }
 
+  findProjectsByUserId(id: number) {
+    if(!id) throw new BadRequestException('User ID is required');
+
+    return this.prisma.test_project_user.findMany({
+      where:{
+        user_id: id
+      }
+    })
+
+  }
 }

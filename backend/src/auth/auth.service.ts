@@ -46,9 +46,7 @@ export class AuthService {
 
   }
 
-
-
-  logout(id: number) {
-    throw new Error('Method not implemented');
+  logout(user:any) {
+    console.log('hit logout route')
   }
 }

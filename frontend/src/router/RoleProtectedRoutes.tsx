@@ -7,6 +7,10 @@ interface RoleProtectedRoutesProps {
 const RoleProtectedRoutes = ({ allowedRoles }: RoleProtectedRoutesProps) => {
   console.log('going through role protected routes')
   const localStorageToken = localStorage.getItem("token");
+  if(!localStorageToken) {
+    return <Navigate to="/" replace />;
+  }
+  
   const decoded = localStorageToken ? jwtDecode(localStorageToken) : null;
 
   const isValidRole = (decoded: any) => {

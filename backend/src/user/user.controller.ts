@@ -22,6 +22,10 @@ export class UserController {
   findOne(@Param('id') id: string) {
     return this.userService.findOne(+id);
   }
+  @Get('projects/:id')
+  findProjectsByUserId(@Param('id') id: string) {
+    return this.userService.findProjectsByUserId(+id)
+  }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {

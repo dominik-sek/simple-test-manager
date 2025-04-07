@@ -7,15 +7,29 @@ import {PrismaService} from "../prisma/prisma.service";
 export class TestProjectService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(createTestProjectDto: CreateTestProjectDto) {
+  async create(createTestProjectDto: CreateTestProjectDto, userId: number) {
     //need to get user id, then create inside joined table i think?
-    return this.prisma.test_project.create({
-      data: createTestProjectDto
+    const project = await this.prisma.test_project.create({
+      data: createTestProjectDto,
     })
+    await this.prisma.test_project_user.create({
+      data:{
+        user_id:userId,
+        test_project_id: project.id
+      }
+    })
+    return project
   }
 
-  async findAll() {
-    return this.prisma.test_project.findMany()
+  async findAll(id: number) {
+    return this.prisma.test_project_user.findMany({
+      where:{
+        user_id: id
+      },
+      select:{
+        test_project: true
+      }
+    })
   }
 
   async findOne(id: number) {

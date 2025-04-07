@@ -20,11 +20,11 @@ export default function TestProjects() {
         console.error('Failed to fetch projects:', err);
       });
   }, []);
-
   return (
     <Page title={'Test projects'}>
       {
         testProject && testProject.map((project: any) => {
+          project = project.test_project
           return (
             <DataCard key={project.id} title={project.name} description={project.description} icon={project.icon} href={`/projects/${project.id}`} />
           )

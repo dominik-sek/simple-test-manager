@@ -1,14 +1,31 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { sidebarItems } from './sidebar-items';
 import SidebarButton from './SidebarButton';
+import { api } from '@/api/helper';
+import { jwtDecode } from 'jwt-decode';
 
 
 export function Sidebar() {
   const [open, setOpen] = useState<number | null>(null);
-  
+
   const handleClick = (index: number) => {
     setOpen((prevOpen) => (prevOpen === index ? null : index));
   };
+  const localStorageToken = localStorage.getItem("token");
+  const decoded = localStorageToken ? jwtDecode(localStorageToken) : null;
+  const userId = decoded?.sub;
+  useEffect(() => {
+
+    api(`/user/projects/${userId}`, { method: 'GET' })
+      .then((res) => {
+        console.log(res); // good for debugging
+        return res;
+      })
+      .catch((err) => {
+        console.error('Failed to get user projects:', err);
+      });
+
+  }, []);
   return (
     <div className='p-8 pt-5 w-72 shadow-md flex flex-col bg-white gap-10 fixed top-0 left-0 h-screen overflow-auto'>
       <div className='flex flex-col justify-between'>
@@ -18,7 +35,7 @@ export function Sidebar() {
         </div>
 
         <div className='flex flex-col py-10'>
-        report a bug button        
+          report a bug button
         </div>
 
         <nav className='mt-4'>
@@ -33,7 +50,7 @@ export function Sidebar() {
                 className={item.className}
                 requiresRole={item.requiresRole}
                 isOpen={index === open}
-                onClick={()=>handleClick(index)}
+                onClick={() => handleClick(index)}
 
               />
             ))}

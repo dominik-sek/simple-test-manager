@@ -1,14 +1,16 @@
-import { createBrowserRouter } from 'react-router';
+import { createBrowserRouter, Navigate } from 'react-router';
 import TestProjects from '@/app/pages/projects/TestProjects';
 import TestCases from '@/app/pages/cases/TestCases';
 import TestRuns from '@/app/pages/runs/TestRuns';
 import AdminHome from '@/app/pages/admin/AdminHome';
 import Reports from '@/app/pages/reports/Reports';
 import Home from '@/app/pages/dashboard/Home';
-import LoginPage from '@/app/pages/login/LoginPage';
+import LoginPage from '@/app/pages/auth/login/LoginPage';
 import ProtectedRoutes from './ProtectedRoutes';
 import RoleProtectedRoutes from './RoleProtectedRoutes';
 import TestProjectDetails from '@/app/pages/projects/TestProjectDetails';
+import Logout from '@/app/pages/auth/logout/Logout';
+import TestProjectCreate from '@/app/pages/projects/TestProjectCreate';
 
 export const router = createBrowserRouter([
   {
@@ -20,6 +22,18 @@ export const router = createBrowserRouter([
     element: <LoginPage />
   },
   {
+    path: '/forgot-password',
+    element: <LoginPage />
+  },
+  {
+    path: '/reset-password',
+    element: <LoginPage />
+  },
+  {
+    path: '/logout',
+    element: <Logout />
+  },
+  {
     element: <ProtectedRoutes />,
     children: [
       {
@@ -29,6 +43,10 @@ export const router = createBrowserRouter([
       {
         path: '/projects',
         element: <TestProjects />
+      },
+      {
+        path: '/projects/create',
+        element: <TestProjectCreate />
       },
       {
         path: '/projects/:id',

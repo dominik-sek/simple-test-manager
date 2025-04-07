@@ -5,6 +5,10 @@ const ProtectedRoutes = () => {
   console.log('going through protected routes')
 
   const localStorageToken = localStorage.getItem("token");
+  if(!localStorageToken) {
+    return <Navigate to="/login" replace />;
+  }
+
   const decoded = localStorageToken ? jwtDecode(localStorageToken) : null;
   
   const isExpired = (decoded: any) => {
@@ -12,7 +16,7 @@ const ProtectedRoutes = () => {
     return decoded.exp < currentTime;
   };
 
-  if (localStorageToken && isExpired(decoded)) {
+  if (isExpired(decoded)) {
     localStorage.removeItem("token");
     return <Navigate to="/login" replace />;
   }

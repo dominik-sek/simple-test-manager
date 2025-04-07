@@ -16,6 +16,6 @@ export const api = async (url: string, options: RequestInit = {}) => {
     const error = await response.json().catch(() => null);
     throw new Error(error?.message || 'API Error');
   }
-
-  return response.json();
+  const data = await response.json();
+  return data;
 };

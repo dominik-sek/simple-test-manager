@@ -1,8 +1,9 @@
-import { Controller, Post, UseGuards, Req, UnauthorizedException } from '@nestjs/common';
+import { Controller, Post, UseGuards, Req, UnauthorizedException, Delete } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import {Request} from 'express';
 import { Public } from 'src/decorators/public.decorator';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -16,5 +17,14 @@ export class AuthController {
 
     if(!req.user) throw new UnauthorizedException('Invalid credentials');
     return this.authService.login(req.user)
+  }
+
+  @Public()
+  @Post('logout')
+  @UseGuards(JwtAuthGuard)
+  async logout(@Req() req: Request) {
+    console.log('LOGOUT ATTEMPT:', req.user);
+    if(req.user) return null;
+    return this.authService.logout(req.user)
   }
 }
