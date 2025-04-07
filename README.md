@@ -1,79 +1,93 @@
-# Requirements
-## Why simple test case manager?
-Multiple of both open source and enterprise solutions are bloated with features that are overengineered, 
-and it seems like they exist purely to confuse everyone - meaning the implementation of a test management software drags out in time, and instead of testing - you write pages upon pages of single-use documents.
-Not to mention, enterprise solutions are expensive.
 
-Simple test manager comes with minimal functions, just to get you started with testing:
+# ⚠️ Currently WIP ⚠️
+> This project is a **work in progress**. Features, structure, and documentation are still evolving.
 
-- Test projects -> global objects, consisting of multiple test suites/test plans
-- Test suites -> object that can hold multiple test cases
-- Test cases -> encapsulated test steps
-  - Test step -> support for markdown, **CHECKLISTS*** images, videos, gifs | statuses
-- Test runs -> run either a whole suite, or choose test cases to run within a test run
-- Parameterized testing -> create pairwise or full testing matrices for better coverage
-- Automation support -> open, documented API - create objects, generate reports, track bugs
-- Simple reports -> generate a list of test runs, test cases and their statuses 
-- Simple bug tracking -> generate a bug fix request, generate pdf bug report
-- JIRA integration
-- Import/export - CSV 
+---
 
-\*I **REALLY** like checklists 
-## Role based auth
-Roles:
-- Admin
-- Tester
-- Test manager?
+# 🧪 Simple Test Case Manager
 
-## Permission management
+A lightweight, no-nonsense test management tool for teams or testers who just want to start testing while documenting their progress — without drowning in enterprise bloat.
 
-1. Permissions should be granural - permission matrix
+# 🤔 Why another test manager?
+Most open-source and enterprise tools are bloated, overengineered, and sometimes feel like they’re designed to slow you down.
 
-# Object hierarchy
-Objects in the system:
-1. Test project
-2. Test suite (collection of tests)
-3. Test case
-4. Test run
+You end up writing pages of single-use documents instead of actually testing.
+And enterprise solutions? Often overpriced, and not even that good.
 
-# Main user flows
+# 🎯 Main features
+Built using React.js and NestJS
 
-## Admin
-1. Approve/create accounts
-2. Block users (employees no longer in the company - can't delete them to keep the test history intact)
-3. Permission management
-4. Edit/archive projects
-5. View/delete generated reports
-6. View statistics
-
-## Tester
-CRUD + clone:
-1. Test 
-   2. project
-   3. suite
-   4. case
-      5. step
-   4. run
-5. Reports
-   6. Test run report
-   7. Test case report
-   8. Bug report
-9. Statistics
-
-## Test manager
-1. Set priorities
-2. schedule test runs
-3. assign test cases/suites/projects to testers
-4. oversee reports/statistics -> generate reports for each tester
+* **Test Projects** – high-level containers for your collections & cases
+* **Test Collections** – logical grouping of related test cases
+* **Test Cases** – individual tests with steps, parameters & expected results
+* **Test Steps** – Markdown-supported steps with statuses
+* **Test Runs** – execute full collections or hand-picked test cases
+* **Parameterized Testing** – generate pairwise/full test matrices
+* **Automation Support** – clean, documented API for full integration
+* **Reporting** – minimal, readable reports on test runs, cases & bugs
+* **Bug Tracking** – raise and track issues with built-in tools
+* **JIRA Integration** – optional link to external issue management
+* **Import/Export** – CSV-based input/output
 
 
-# Database
+# 🔐 Role-based Authentication
+Users are assigned roles with permission-based access:
 
+* Admin
+* Tester
+* Test Manager _(optional/experimental)_
+
+# 🛡️ Permission Management
+
+* Permission matrix
+* Future support for project/user-based role scoping
+
+# 🧱 Object Hierarchy
+1. Test Project
+2. Test Collection
+3. Test Case
+4. Test Run
+
+# 👤 Main User Flows
+## 👑 Admin
+* Create & approve user accounts
+* Block users (preserve test history)
+* Manage permissions
+* Edit/archive projects
+* View/customize reports
+* Access statistics
+
+## 🧪 Tester
+
+* CRUD + cloning
+  * Projects
+  * Suites
+  * Cases
+  * Steps
+  * Runs
+
+* Access reports:
+  * Test Run Report
+  * Test Case Report
+  * Bug Report
+  * View statistics
+
+## 📋 Test Manager
+Set case/suite/project priorities
+
+Schedule test runs
+
+Assign tests to testers
+
+Oversee test progress and generate reports per tester
+
+## 🗄️ Database
 PostgreSQL
+Full ER diagram:
+![ER](er.png)
 
-ER diagram:
-![ER](ER.png)
-
-
-update nest packages:
-```npm-check-updates "/nestjs*/" -u```
+# 🔧 Developer Notes
+## 🔄 Update NestJS packages:
+```bash
+npx npm-check-updates "/nestjs*/" -u
+```
