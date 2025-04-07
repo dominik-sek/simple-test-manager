@@ -1,7 +1,7 @@
 import { useLocation } from 'react-router'
 
 export default function Breadcrumbs() {
-  //create new hook that gets the current location in title format
+  //todo: create new hook that gets the current location in title format
   const location = useLocation();
   const path = location.pathname.split('/').filter(Boolean);
   console.log(path)

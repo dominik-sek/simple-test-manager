@@ -18,7 +18,6 @@ export function Sidebar() {
 
     api(`/user/projects/${userId}`, { method: 'GET' })
       .then((res) => {
-        console.log(res); // good for debugging
         return res;
       })
       .catch((err) => {

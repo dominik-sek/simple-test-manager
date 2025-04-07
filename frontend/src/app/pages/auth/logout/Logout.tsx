@@ -10,7 +10,7 @@ export default function Logout() {
   useEffect(() => { 
     api('/auth/logout', { method: 'POST' })
       .then((res) => {
-        console.log(res); // good for debugging
+        console.log(res);
       })
       .catch((err) => {
         console.error('Failed to logout:', err);

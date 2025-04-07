@@ -10,10 +10,9 @@ export default function TestProjectCreate() {
   
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
 
-    event.preventDefault(); // Prevent the default form submission behavior
-    const formData = new FormData(event.currentTarget); // Get the form data
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
 
-    // You can now use the formData object to access the values of the form fields
     const projectName = formData.get('projectName');
     const description = formData.get('description');
 
@@ -22,9 +21,7 @@ export default function TestProjectCreate() {
       description: description as string
     });
 
-    // Perform any additional actions, such as sending the data to an API or updating state
 
-    //send the data to the API
     api('/test-project', {
       method: 'POST',
       body: JSON.stringify({
@@ -37,7 +34,6 @@ export default function TestProjectCreate() {
     })
       .then((res) => {
         console.log(res); // good for debugging
-        // You can also redirect the user to another page or show a success message
       })
       .catch((err) => {
         console.error('Failed to create project:', err);

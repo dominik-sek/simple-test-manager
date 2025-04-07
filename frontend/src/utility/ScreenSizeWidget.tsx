@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 
-// Define tailwind breakpoints once
 const tailwindSizes = {
     "sm": 640,
     "md": 768,
@@ -34,11 +33,11 @@ export const ScreenSizeWidget = () => {
             setTailwindSize(currentSize);
         };
 
-        handleResize(); // Call once on mount to initialize
+        handleResize();
 
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
-    }, []); // Empty array — only set up listener once on mount
+    }, []);
 
     return (
         <div className="absolute bottom-0 left-0 w-64 h-32 text-3xl bg-black opacity-20 text-white p-2">

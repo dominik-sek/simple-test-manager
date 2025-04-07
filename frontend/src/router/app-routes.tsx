@@ -1,4 +1,4 @@
-import { createBrowserRouter, Navigate } from 'react-router';
+import { createBrowserRouter } from 'react-router';
 import TestProjects from '@/app/pages/projects/TestProjects';
 import TestCases from '@/app/pages/cases/TestCases';
 import TestRuns from '@/app/pages/runs/TestRuns';

@@ -9,12 +9,12 @@ export default function TestProjects() {
   const [testProject, setTestProject] = useState<any>(null);
 
   const params = useParams();
-  console.log(params); // good for debugging
+  console.log(params);
   useEffect(() => {
     api('/test-project', { method: 'GET' })
       .then((res) => {
-        console.log(res); // good for debugging
-        setTestProject(res); // <-- store it in state
+        console.log(res);
+        setTestProject(res);
       })
       .catch((err) => {
         console.error('Failed to fetch projects:', err);
