@@ -5,10 +5,12 @@ import { jwtDecode } from 'jwt-decode';
 
 interface AuthState {
   token: string | null;
-  user: DecodedToken | null;
+  decodedToken: DecodedToken | null;
+  user: any;
 }
 const initialState: AuthState = {
   token: null,
+  decodedToken: null,
   user: null
 };
 
@@ -21,15 +23,20 @@ const authSlice = createSlice({
       const { token } = action.payload;
       const decoded = jwtDecode<DecodedToken>(token)
       
-      state.user = decoded;
+      state.decodedToken = decoded;
       state.token = token;
     },
+    setUser: (state, action: PayloadAction<{ user: any; }>) => {
+      state.user = action.payload;
+    },
+    
     logoutReducer: (state) => {
-      state.user = null;
+      state.decodedToken = null;
       state.token = null;
+      state.user = null;
     }
   }
 })
 
-export const { loginReducer, logoutReducer } = authSlice.actions;
+export const { loginReducer, logoutReducer, setUser } = authSlice.actions;
 export default authSlice.reducer;

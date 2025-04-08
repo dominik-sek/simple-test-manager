@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { loginReducer } from '@/store/slices/authSlice';
+import { loginReducer, logoutReducer, setUser } from '@/store/slices/authSlice';
 import {jwtDecode} from 'jwt-decode';
+import { useAuthDispatch } from './store/hooks';
+import { api } from './api/helper';
 
 interface DecodedToken {
   id: number;
@@ -9,22 +11,40 @@ interface DecodedToken {
   role: string;
 }
 
-export default function AppInitializer({ children }: { children: React.ReactNode }) {
+export default function AuthInitializer({ children }: { children: React.ReactNode; }) {
+  console.log('AuthInitializer')
   const [loading, setLoading] = useState(true);
-  const dispatch = useDispatch();
+
+  const dispatch = useAuthDispatch();
 
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
       try {
-        const decoded = jwtDecode<DecodedToken>(token);
         dispatch(loginReducer({ token }));
+
+        api('/user/me', {
+          method:'GET'
+        }).then((user) => {
+          dispatch(setUser(user))
+        }).catch((err) => {
+          dispatch(logoutReducer());
+          localStorage.removeItem('token')
+        }).finally(() => {
+          setLoading(false)
+        })
+        
+
       } catch (err) {
         console.warn('Invalid token in localStorage');
         localStorage.removeItem('token');
+        dispatch(logoutReducer())
+        setLoading(false);
+
       }
+    } else {
+      setLoading(false);
     }
-    setLoading(false);
   }, []);
 
   if (loading) return null; // Or show a loading spinner

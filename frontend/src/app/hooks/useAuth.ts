@@ -4,7 +4,7 @@ import { jwtDecode } from 'jwt-decode';
 
 
 export const useAuth = () => {
-  const user = useAuthSelector((state) => state.auth.user)
+  const user = useAuthSelector((state) => state.auth.decodedToken)
   const token = useAuthSelector((state) => state.auth.token)
   console.log(user)
   console.log(token)

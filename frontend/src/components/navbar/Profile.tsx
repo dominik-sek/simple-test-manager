@@ -3,20 +3,29 @@ import { jwtDecode } from 'jwt-decode';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { useAuthSelector } from '@/store/hooks';
+
+
 interface ProfileProps {
   isOpen: boolean;
   onClick: () => void;
 }
 export default function Profile(props: ProfileProps) {
-  const userId = jwtDecode(localStorage.getItem('token') || '').sub;
+
   const [user, setUser] = useState<any>(null);
+
+  const userFullName = useAuthSelector((state) => state.auth.user?.full_name)
   
-  const userLetters = user?.full_name.split(' ').map((name: string) => name.charAt(0).toUpperCase()).join('');
-  useEffect(() => {
-    api(`/user/${userId}`, { method: 'GET' }).then((res) => {
-      setUser(res);
-    })
-  },[])
+  const userLetters = userFullName?.split(' ').map((name: string) => name.charAt(0).toUpperCase()).join('');
+  
 
   return (
     <div className='flex items-center justify-end gap-5 min-w-48'>

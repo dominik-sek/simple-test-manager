@@ -37,7 +37,8 @@ export class AuthService {
     const payload: JwtPayload = {
       sub: user.id,
       username: user.username,
-      role: user.role
+      role: user.role,
+      full_name: user.full_name,
     }
     const now = new Date().toISOString();
 
