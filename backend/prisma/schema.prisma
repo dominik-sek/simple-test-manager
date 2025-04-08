@@ -11,6 +11,28 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model test_parameter_key {
+  id     Int                    @id @default(autoincrement())
+  key    String
+  values test_parameter_value[]
+}
+
+model test_parameter_value {
+  id                  Int                   @id @default(autoincrement())
+  value               String
+  key_id              Int
+  key                 test_parameter_key    @relation(fields: [key_id], references: [id])
+  test_case_parameter test_case_parameter[]
+}
+
+model test_case_parameter {
+  id                 Int                  @id @default(autoincrement())
+  test_case_id       Int
+  parameter_value_id Int
+  paremeter_value    test_parameter_value @relation(fields: [parameter_value_id], references: [id])
+  test_case          test_case            @relation(fields: [test_case_id], references: [id])
+}
+
 model user_log {
   id        Int      @id @default(autoincrement())
   user_id   Int?
@@ -27,8 +49,8 @@ model test_case {
   name                      String?                     @db.VarChar(255)
   description               String?                     @db.VarChar(255)
   status                    test_status?
-  parameters                Json?
   test_case_run             test_case_run[]
+  parameters                test_case_parameter[]
   test_collection_test_case test_collection_test_case[]
   test_step                 test_step[]
 }
@@ -127,11 +149,13 @@ model user {
 
   user_log user_log[]
 }
+
 enum user_log_result {
   ERROR
   INFO
   WARNING
 }
+
 enum test_status {
   todo
   running

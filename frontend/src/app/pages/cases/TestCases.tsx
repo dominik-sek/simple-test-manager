@@ -63,10 +63,9 @@ export default function TestCases() {
 
   ]
 
-
-
   return (
     <Page title={'Test Cases'}>
+      
       <DataTable columns={columns} data={testCases} actions={actions} />
     </Page>
   )
