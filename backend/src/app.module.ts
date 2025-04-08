@@ -15,6 +15,7 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { RolesGuard } from './guards/roles.guard';
 import { UserLogModule } from './user-log/user-log.module';
 import { UserLogInterceptor } from './interceptors/user-log.interceptor';
+import { TestParameterModule } from './test-parameter/test-parameter.module';
 
 @Module({
   imports: [
@@ -31,7 +32,8 @@ import { UserLogInterceptor } from './interceptors/user-log.interceptor';
       envFilePath:'.env',
       isGlobal: true
     }),
-    UserLogModule
+    UserLogModule,
+    TestParameterModule
   ],
 
   controllers: [AppController],

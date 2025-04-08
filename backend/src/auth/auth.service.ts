@@ -19,7 +19,9 @@ export class AuthService {
   }
 
   async validateUser(loginUserDto: LoginUserDto) {
-    const user = await this.userService._findOneWithPasswordByEmail(loginUserDto.email)
+    console.log('running valudate user inside uservice')
+    const user = await this.userService._findOneWithPasswordByUsername(loginUserDto.username)
+    if(!user) throw new UnauthorizedException('Invalid credentials');
     const passwordMatch = await bcrypt.compare(loginUserDto.password, user.password)
     if(!user.is_active) throw new UnauthorizedException('User is disabled');
     if(!passwordMatch) throw new UnauthorizedException('Username or password is incorrect');
@@ -30,10 +32,11 @@ export class AuthService {
   async getById(id: number) {
     return this.userService.findOne(id)
   }
+
   async login (user: any){
     const payload: JwtPayload = {
       sub: user.id,
-      email: user.email,
+      username: user.username,
       role: user.role
     }
     const now = new Date().toISOString();

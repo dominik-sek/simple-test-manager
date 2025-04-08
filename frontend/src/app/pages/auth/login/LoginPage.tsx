@@ -1,68 +1,119 @@
 import { login } from '@/api/login';
-import { useEffect, useState } from 'react';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+
+import { useEffect } from 'react';
+
+const formSchema = z.object({
+  username: z.string().min(2, {
+    message: "Username must be at least 2 characters.",
+  }),
+  password: z.string().min(2, {
+    message: "Password must be at least 2 characters",
+  })
+});
+
+
+
 
 export default function LoginPage() {
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value);
-    setEmail(e.target.value);
-  }
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value);
-    setPassword(e.target.value);
-  }
-  const handleLogin = async (e: React.FormEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    const token = await login(email, password);
-    if (token) {
-      localStorage.setItem('token', token.access_token);
-      window.location.href = '/';
-    } else {
-      alert('Invalid credentials');
-    }
-
-    console.log(email, password);
-  }
 
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
       window.location.href = '/';
     }
-  }, [])
+  }, []);
 
 
 
-  return(
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      username: "",
+      password: ""
+    },
+    mode:"onChange"
+    
+  });
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      const token = await login(values.username, values.password)
+      if (token) {
+        localStorage.setItem("token", token.access_token)
+        window.location.href = '/'
+      }
+    } catch (error: any) {
+      
+      const message = error?.message || "Something went wrong"
+      form.setError('username', {})
+      form.setError('password', {
+        message: message
+      })
+      
+    }
+    
+  }
+
+  return (
     <div className='h-screen w-screen flex items-center justify-center bg-slate-200'>
-      <form className='flex flex-col items-center justify-center gap-2'>
-        <h1 className='text-3xl font-bold text-slate-700'>Login</h1>
-        <p className='text-slate-500'>Please enter your credentials</p>
-        <input onChange={(e) => handleEmailChange(e)} id='email' type="email" placeholder="Email" className='h-10 w-64 rounded-lg bg-slate-100 p-2 mb-4' />
-        <input onChange={(e) => handlePasswordChange(e)} id='password' type="password" placeholder="Password" className='h-10 w-64 rounded-lg bg-slate-100 p-2 mb-4' />
+
+
+      <Form {...form}>
         
-        <button type='submit' onClick={(e) => handleLogin(e)} className='h-10 w-64 rounded-lg bg-palette-green text-white font-bold hover:bg-palette-green/80 transition-all duration-200 ease-in-out'>Login</button>
+        <form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col items-center justify-center gap-2'>
 
-        <p className='text-slate-500'>Don't have an account? <a href="/register" className='text-palette-green font-bold'>Register</a></p>
-        <p className='text-slate-500'>Forgot your password? <a href="/reset-password" className='text-palette-green font-bold'>Reset Password</a></p>
-        <p className='text-slate-500'>Or login with</p>
+        <h1 className='text-3xl font-bold text-slate-700 mb-5'>Login</h1>
+          <FormField
+            control={form.control}
+            name="username"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Username</FormLabel>
+                <FormControl>
+                  <Input className="h-10 w-64 bg-slate-100" placeholder='Username' {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
 
-        <div className='flex items-center justify-center gap-2'>  
-          <button className='h-10 w-10 rounded-full bg-slate-100 flex items-center justify-center hover:bg-palette-green/20 transition-all duration-200 ease-in-out'>
-            <img src="/google-icon.png" alt="Google" className='h-6 w-6' />
-          </button>
+          />
 
-          <button className='h-10 w-10 rounded-full bg-slate-100 flex items-center justify-center hover:bg-palette-green/20 transition-all duration-200 ease-in-out'>
-            <img src="/github-icon.png" alt="GitHub" className='h-6 w-6' />
-          </button>
-        </div>
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Password</FormLabel>
+                <FormControl>
+                  <Input className="h-10 w-64 bg-slate-100" placeholder='Password' {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
 
-        <p className='text-slate-500'>By logging in, you agree to our <a href="/terms" className='text-palette-green font-bold'>Terms of Service</a> and <a href="/privacy" className='text-palette-green font-bold'>Privacy Policy</a>.</p>
+          />
 
-      </form>
+
+          <Button disabled={form.formState.isSubmitting} className='w-64 bg-palette-green/80 cursor-pointer hover:bg-palette-green' type="submit">{form.formState.isSubmitting ? 'Logging in...' : 'Login'}</Button>
+          <p className='text-slate-500'>Don't have an account? <a href="/register" className='text-palette-green font-bold'>Register</a></p>
+          <p className='text-slate-500'>Forgot your password? <a href="/reset-password" className='text-palette-green font-bold'>Reset Password</a></p>
+
+        </form>
+      </Form>
     </div>
-  )
+  );
 }

@@ -1,4 +1,5 @@
 import { api } from '@/api/helper';
+import { Button } from '@/components/ui/button'
 import DataTable from '@/components/data-table/DataTable';
 import Page from '@/components/page/Page';
 import { l } from 'node_modules/react-router/dist/development/fog-of-war-1hWhK5ey.d.mts';
@@ -7,7 +8,7 @@ import { useParams } from 'react-router';
 
 export default function TestProjects() {
 
-  const [testProject, setTestProject] = useState<any>(null);
+  const [testProjects, setTestProject] = useState<any>(null);
   const params = useParams();
   const columns = [
     {
@@ -54,7 +55,7 @@ export default function TestProjects() {
   useEffect(() => {
     api('/test-project', { method: 'GET' })
       .then((res) => {
-
+        console.log(res)
         setTestProject(res);
       })
       .catch((err) => {
@@ -64,8 +65,20 @@ export default function TestProjects() {
 
   return (
     <Page title={'Test projects'}>
+      {
+        !testProjects || testProjects.length === 0 && (
+          <div className='w-full h-full text-slate-500 items-center justify-center flex flex-col text-2xl '>
+            <span>No projects yet</span>
+            <Button >
+              hello
+
+            </Button>
+          </div>
+        )
+        }
+      {/*
       <DataTable columns={columns} data={testProject} actions={actions}  />
-      {/* {
+       {
         testProject && testProject.map((project: any) => {
           project = project.test_project
           return (

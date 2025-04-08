@@ -31,10 +31,6 @@ export const sidebarItems: SidebarItem[] = [
     label: "Projects",
     route: "/projects",
     icon: LuFolder,
-    children: [
-      { label: "All Projects", route: "/projects", icon: LuFolder  },
-      { label: "Create Project", route: "/projects/create", icon: LuFolder  },
-    ],
   },
   {
     label: "Test Collections",
@@ -45,19 +41,13 @@ export const sidebarItems: SidebarItem[] = [
     label: "Test Cases",
     route: "/cases",
     icon: LuFileText,
-    children: [
-      { label: "All Cases", route: "/cases", icon: LuFileText },
-      { label: "Create Case", route: "/cases/create", icon: LuFileText },
-    ],
+
   },
   {
     label: "Test Runs",
     route: "/runs",
     icon: LuCirclePlay ,
-    children: [
-      { label: "All Runs", route: "/runs", icon: LuCirclePlay },
-      { label: "Start New Run", route: "/runs/new", icon: LuCirclePlay },
-    ],
+
   },
   {
     label: "Reports",
@@ -74,9 +64,5 @@ export const sidebarItems: SidebarItem[] = [
     route: "/admin",
     icon: LuSettings ,
     requiresRole: "admin",
-    children: [
-      { label: "Users", route: "/admin/users", icon: LuUser },
-      { label: "Roles & Permissions", route: "/admin/roles", icon: LuShield },
-    ],
   },
 ];

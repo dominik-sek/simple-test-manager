@@ -24,6 +24,10 @@ export default function Navbar() {
 
         <div className='h-10 w-[1px] bg-slate-300'></div>
       
+      <select className='w-48 bg-white'>
+
+      </select>
+
       <Profile isOpen={profileOpen} onClick={() => setProfileOpen(!profileOpen)} />
 
     </nav>

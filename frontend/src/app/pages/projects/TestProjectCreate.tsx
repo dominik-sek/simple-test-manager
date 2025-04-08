@@ -1,5 +1,4 @@
 import { api } from '@/api/helper';
-import CreateNewItemForm from '@/components/forms/CreateNewItemForm';
 import Page from '@/components/page/Page';
 import { useState } from 'react';
 
@@ -44,7 +43,6 @@ export default function TestProjectCreate() {
 
   return (
     <Page title={'Create Project'}>
-      <CreateNewItemForm />
     </Page>
   );
 }

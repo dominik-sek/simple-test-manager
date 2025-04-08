@@ -18,9 +18,10 @@ export default function SidebarButton(props: SidebarButtonProps) {
     if (!decoded) return false;
     if (!props.requiresRole) return true;
     if (!decoded.role) return false;
-
+    console.log(decoded.role)
     return props.requiresRole ? props.requiresRole.includes(decoded.role) : true;
   };
+
   const hasChildren = !!props.children;
   const buttonClasses = clsx(`relative overflow-hidden
     h-12 w-full flex gap-3 p-2 rounded-md items-center font-bold text-slate-700
@@ -39,50 +40,15 @@ export default function SidebarButton(props: SidebarButtonProps) {
       <props.icon size={24} />
       <span className='text-sm font-bold  '>{props.label}</span>
 
-      {
-        hasChildren && (
-          <span className={`absolute right-2 transition-all duration-200 ${props.isOpen ? 'rotate-180' : ''}`}>
-            <FaAngleDown size={18} />
-          </span>
-        )
-      }
     </div>
   );
 
   return (
     <div className='w-full'>
-
-      {!hasChildren ? (
         <Link to={props.route} onClick={props.onClick}>
           {buttonContent}
         </Link>
 
-      ) : (
-        <>
-          {buttonContent}
-          <div className={clsx('overflow-hidden transition-all duration-200 ease-in-out', props.isOpen ? 'max-h-96 ' : 'max-h-0 ')} >
-            {
-              props.children?.map((child, index) => (
-                  <SidebarButton
-                    label={child.label}
-                    route={child.route}
-                    icon={child.icon}
-                    className='pl-6 mt-2'
-                    requiresRole={child.requiresRole}
-                    children={child.children}
-                    isOpen={false}
-                    onClick={() => { }}
-                    key={index + child.label + child.route} // Ensure unique key
-                  />
-              )
-              )
-            }
-          </div>
-
-        </>
-      )
-      }
     </div>
-  );
-
+    )
 }

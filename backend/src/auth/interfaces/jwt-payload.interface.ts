@@ -5,6 +5,6 @@ export type USER_ROLE = {
 }
 export interface JwtPayload{
   sub: number,
-  email: string,
+  username: string,
   role: USER_ROLE | string
 }

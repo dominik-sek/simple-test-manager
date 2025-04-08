@@ -1,36 +1,37 @@
-interface dataTableProps {
-  columns: {
-    [key: string]: string;
-    label: string;
-  }[]
-  data: any[];
-  actions: any[];
-  //   onRowClick?: (row: any) => void;
-  //   className?: string;
-  //   style?: React.CSSProperties;
-  //   striped?: boolean;
-  //   bordered?: boolean;
-  //   hoverable?: boolean;
-  //   pagination?: boolean;
-  //   pageSize?: number;
-  //   onPageChange?: (page: number) => void;
-  //   totalRecords?: number;
+interface DataTableColumn {
+  key: string;
+  label: string;
+  render?: (value: any, row: any) => React.ReactNode;
 }
-export default function DataTable(props: dataTableProps) {
+
+interface DataTableProps {
+  columns: DataTableColumn[];
+  data: any[];
+  actions: {
+    label: string;
+    onClick?: (row: any) => void;
+  }[];
+}
+
+export default function DataTable(props: DataTableProps) {
   console.log(props.data); //array of objects
   return (
     <div className='flex flex-col gap-4 w-full'>
       <div className='flex flex-row items-center'>
+      <button
+    onClick={() => setCreatingNew(true)}
+    className='mt-4 px-4 py-2 bg-palette-green text-white rounded-md hover:bg-palette-green/80'
+  >
+    + Create New
+  </button>
         
-        <p>mass actions select</p>
-        <select>
-          <option value="10">10</option>
-        </select>
 
       </div>
 
       <table className='w-full bg-white shadow-md rounded-lg overflow-hidden'>
+        
         <thead className='bg-palette-slate'>
+        
           <tr>
             <th className='text-left p-2'>
               <input type="checkbox" className='w-4 h-4 ' />
