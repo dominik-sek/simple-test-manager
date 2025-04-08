@@ -1,24 +1,15 @@
-import { jwtDecode } from 'jwt-decode';
+import { useAuth } from '@/app/hooks/useAuth';
 import { Navigate, Outlet } from "react-router";
 
 interface RoleProtectedRoutesProps {
   allowedRoles: string[];
 }
 const RoleProtectedRoutes = ({ allowedRoles }: RoleProtectedRoutesProps) => {
-  console.log('going through role protected routes')
-  const localStorageToken = localStorage.getItem("token");
-  if(!localStorageToken) {
-    return <Navigate to="/" replace />;
-  }
+  const { role, isLoggedIn } = useAuth()
   
-  const decoded = localStorageToken ? jwtDecode(localStorageToken) : null;
-
-  const isValidRole = (decoded: any) => {
-    return allowedRoles.includes(decoded.role);
-  };
-  
-  
-	return isValidRole(decoded) ? <Outlet /> : <Navigate to="/"  replace />;
+  if (!isLoggedIn || !role) return <Navigate to="/" replace />
+  console.log(allowedRoles.includes(role))
+	return allowedRoles.includes(role) ? <Outlet /> : <Navigate to="/"  replace />;
 };
 
 export default RoleProtectedRoutes;

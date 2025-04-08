@@ -1,16 +1,23 @@
 import { api } from '@/api/helper';
+import { useAuthDispatch } from '@/store/hooks';
+import { logoutReducer } from '@/store/slices/authSlice';
 import { useEffect } from 'react';
-import { Navigate } from 'react-router';
+import { Navigate, useNavigate } from 'react-router';
 
 
 export default function Logout() {
-  
-  localStorage.removeItem("token");  
+  const navigate = useNavigate()
+  const dispatch = useAuthDispatch();
+
 
   useEffect(() => { 
+    localStorage.removeItem("token");  
+    dispatch(logoutReducer())
+    navigate('/login')
+
     api('/auth/logout', { method: 'POST' })
       .then((res) => {
-        console.log(res);
+        console.log(res)
       })
       .catch((err) => {
         console.error('Failed to logout:', err);
@@ -18,6 +25,6 @@ export default function Logout() {
   }, []);
 
 
-  return <Navigate to="/login" replace />;
+  return null;
   
 }

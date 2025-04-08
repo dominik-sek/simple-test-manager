@@ -14,20 +14,17 @@ import {
 } from "@/components/ui/form";
 
 import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { loginReducer } from '@/store/slices/authSlice';
+import { AuthDispatch } from '@/store/store';
+import { useAuthDispatch } from '@/store/hooks';
 
-const formSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
-  password: z.string().min(2, {
-    message: "Password must be at least 2 characters",
-  })
-});
 
 
 
 
 export default function LoginPage() {
+  const dispatch = useAuthDispatch()
 
 
   useEffect(() => {
@@ -37,7 +34,15 @@ export default function LoginPage() {
     }
   }, []);
 
-
+  const formSchema = z.object({
+    username: z.string().min(2, {
+      message: "Username must be at least 2 characters.",
+    }),
+    password: z.string().min(2, {
+      message: "Password must be at least 2 characters",
+    })
+  });
+  
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -45,7 +50,6 @@ export default function LoginPage() {
       username: "",
       password: ""
     },
-    mode:"onChange"
     
   });
 
@@ -53,6 +57,7 @@ export default function LoginPage() {
     try {
       const token = await login(values.username, values.password)
       if (token) {
+        dispatch(loginReducer({token: token.access_token}))
         localStorage.setItem("token", token.access_token)
         window.location.href = '/'
       }

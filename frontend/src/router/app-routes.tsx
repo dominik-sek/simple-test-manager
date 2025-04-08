@@ -72,7 +72,7 @@ export const router = createBrowserRouter([
         element: <Reports />
       },
       {
-        element: <RoleProtectedRoutes allowedRoles={['admin', 'tester']} />,
+        element: <RoleProtectedRoutes allowedRoles={['admin']} />,
         children: [
           {
             path: '/admin',
