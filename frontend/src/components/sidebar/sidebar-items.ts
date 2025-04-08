@@ -37,6 +37,11 @@ export const sidebarItems: SidebarItem[] = [
     ],
   },
   {
+    label: "Test Collections",
+    route: "/collections",
+    icon: LuFolder
+  },
+  {
     label: "Test Cases",
     route: "/cases",
     icon: LuFileText,

@@ -1,4 +1,5 @@
 import { api } from '@/api/helper';
+import CreateNewItemForm from '@/components/forms/CreateNewItemForm';
 import Page from '@/components/page/Page';
 import { useState } from 'react';
 
@@ -41,23 +42,9 @@ export default function TestProjectCreate() {
   }
 
 
-
   return (
     <Page title={'Create Project'}>
-      <div>
-      <h1>Create a new project</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="projectName">Project Name:</label>
-          <input className='bg-white' type="text" id="projectName" name="projectName" required />
-        </div>
-        <div>
-          <label htmlFor="description">Description:</label>
-          <textarea className='bg-white' id="description" name="description"></textarea>
-        </div>
-        <button  type="submit">Create Project</button>
-      </form>
-    </div>
+      <CreateNewItemForm />
     </Page>
   );
 }

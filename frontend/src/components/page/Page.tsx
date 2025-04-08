@@ -19,9 +19,10 @@ export default function Page(props: PageProps) {
         <div className='pt-14 px-14 gap-4 flex flex-col'>
 
           <Breadcrumbs />
-
-          <h1 className='text-3xl font-bold text-slate-700'>{props.title}</h1>
-          
+          <div>
+            <h1 className='text-3xl font-bold text-slate-700'>{props.title}</h1>
+            
+          </div>
           <div className='flex flex-wrap gap-10 pb-10 '>
           {props.children}
           </div>

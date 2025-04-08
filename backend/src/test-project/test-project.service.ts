@@ -22,6 +22,29 @@ export class TestProjectService {
   }
 
   async findAll(id: number) {
+    //if admin, return all
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id: id
+      },
+      select:{
+        role: true
+      }
+    })
+    if(user.role == 'admin'){
+      return this.prisma.test_project.findMany({
+        select:{
+          id: true,
+          name: true,
+          description: true,
+          test_project_user: true,
+          test_project_collection: true,
+          _count: true
+        }
+
+      })
+    }
+
     return this.prisma.test_project_user.findMany({
       where:{
         user_id: id
