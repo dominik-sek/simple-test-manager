@@ -2,9 +2,10 @@ generator client {
   provider = "prisma-client-js"
 }
 
-generator prismaClassGenerator {
-  provider = "prisma-class-generator"
-}
+//
+// generator prismaClassGenerator {
+//   provider = "prisma-class-generator"
+// }
 
 datasource db {
   provider = "postgresql"
@@ -21,8 +22,8 @@ model test_parameter_value {
   id                  Int                   @id @default(autoincrement())
   value               String
   key_id              Int
-  key                 test_parameter_key    @relation(fields: [key_id], references: [id])
   test_case_parameter test_case_parameter[]
+  key                 test_parameter_key    @relation(fields: [key_id], references: [id])
 }
 
 model test_case_parameter {
@@ -40,8 +41,7 @@ model user_log {
   result    String   @default("INFO")
   metadata  Json?
   createdAt DateTime @default(now())
-
-  user user? @relation(fields: [user_id], references: [id])
+  user      user?    @relation(fields: [user_id], references: [id])
 }
 
 model test_case {
@@ -49,8 +49,8 @@ model test_case {
   name                      String?                     @db.VarChar(255)
   description               String?                     @db.VarChar(255)
   status                    test_status?
-  test_case_run             test_case_run[]
   parameters                test_case_parameter[]
+  test_case_run             test_case_run[]
   test_collection_test_case test_collection_test_case[]
   test_step                 test_step[]
 }
@@ -146,8 +146,7 @@ model user {
   is_active         Boolean?
   test_project_user test_project_user[]
   test_step_run     test_step_run[]
-
-  user_log user_log[]
+  user_log          user_log[]
 }
 
 enum user_log_result {
