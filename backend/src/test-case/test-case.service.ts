@@ -12,9 +12,32 @@ export class TestCaseService {
       data: createTestCaseDto
     })
   }
+  async countCasesByStatus(){
+    const [total, grouped] = await Promise.all([
+      this.prisma.test_case.count(),
+      this.prisma.test_case.groupBy({
+        by: ['status'],
+        _count: {
+          _all: true
+        }
+      })
+    ])
+    return{
+      total,
+      grouped: grouped.map(group=>({
+        status: group.status,
+        count: group._count._all,
+      }))
+    }
+
+  }
 
   findAll() {
-    return this.prisma.test_case.findMany()
+    return this.prisma.test_case.findMany({
+      include:{
+        parameters: true
+      }
+    })
   }
 
   findOne(id: number) {

@@ -18,7 +18,6 @@ import { test_collectionModel } from '../../../../../shared';
 
 export default function TestCollections() {
   const [testCollections, setTestCollections] = useState<test_collectionModel[]>([]);
-  console.log(testCollections);
   const columns: ColumnDef<test_collectionModel>[] = [
     {
       accessorKey: 'id',
@@ -28,7 +27,7 @@ export default function TestCollections() {
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Project ID
+            ID
             <ArrowUpDown />
           </Button>
         )
@@ -36,16 +35,16 @@ export default function TestCollections() {
     },
     {
       accessorKey: 'name',
-      header:'Collection name'
+      header:'Name'
     },
     {
       accessorKey: 'description',
-      header:'Collection description'
+      header:'Description'
     },
     {
       id:"actions",
       cell:(({row})=>{
-        const project = row.original
+        const collection = row.original
 
         return (
           <DropdownMenu>
@@ -58,9 +57,9 @@ export default function TestCollections() {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuItem
-                onClick={() => navigator.clipboard.writeText(String(project.name))}
+                onClick={() => navigator.clipboard.writeText(String(collection.name))}
               >
-                Copy collection name
+                Copy name
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem>Edit</DropdownMenuItem>
@@ -82,10 +81,7 @@ export default function TestCollections() {
         console.error('Failed to fetch test cases:', err);
       });
   }, []);
-
-
-
-
+  
   return (
     <Page title={'Test Collections'}>
       <DataTable columns={columns} data={testCollections} />

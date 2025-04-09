@@ -17,6 +17,11 @@ export class TestCaseController {
     return this.testCaseService.findAll();
   }
 
+  @Get('stats')
+  countCasesByStatus(){
+    return this.testCaseService.countCasesByStatus();
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.testCaseService.findOne(+id);

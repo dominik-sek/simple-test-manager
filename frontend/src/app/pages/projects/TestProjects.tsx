@@ -26,7 +26,7 @@ export default function TestProjects() {
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Project ID
+            ID
             <ArrowUpDown />
           </Button>
         )
@@ -34,7 +34,7 @@ export default function TestProjects() {
     },
     {
       accessorKey: 'name',
-      header:'Project Name'
+      header:'Name'
     },
     {
       accessorKey: 'description',
@@ -58,12 +58,12 @@ export default function TestProjects() {
               <DropdownMenuItem
                 onClick={() => navigator.clipboard.writeText(String(project.name))}
               >
-                Copy project name
+                Copy name
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Edit Project</DropdownMenuItem>
-              <DropdownMenuItem>View project</DropdownMenuItem>
-              <DropdownMenuItem>Archive project</DropdownMenuItem>
+              <DropdownMenuItem>Edit</DropdownMenuItem>
+              <DropdownMenuItem>View</DropdownMenuItem>
+              <DropdownMenuItem>Archive</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         )

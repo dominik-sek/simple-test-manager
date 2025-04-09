@@ -28,7 +28,7 @@ export default function TestCases() {
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Project ID
+            Case ID
             <ArrowUpDown />
           </Button>
         )
@@ -36,16 +36,24 @@ export default function TestCases() {
     },
     {
       accessorKey: 'name',
-      header:'Project Name'
+      header:'Name'
     },
     {
       accessorKey: 'description',
       header:'Description'
     },
     {
+      accessorKey: 'status',
+      header:'Status'
+    },
+    {
+      accessorKey: 'parameters',
+      header:'Parameters' //cell should be some kind of expandable?
+    },
+    {
       id:"actions",
       cell:(({row})=>{
-        const project = row.original
+        const testCase = row.original
 
         return (
           <DropdownMenu>
@@ -58,14 +66,14 @@ export default function TestCases() {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuItem
-                onClick={() => navigator.clipboard.writeText(String(project.name))}
+                onClick={() => navigator.clipboard.writeText(String(testCase.name))}
               >
-                Copy project name
+                Copy name
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Edit Project</DropdownMenuItem>
-              <DropdownMenuItem>View project</DropdownMenuItem>
-              <DropdownMenuItem>Archive project</DropdownMenuItem>
+              <DropdownMenuItem>Edit</DropdownMenuItem>
+              <DropdownMenuItem>View</DropdownMenuItem>
+              <DropdownMenuItem>Archive</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         )
