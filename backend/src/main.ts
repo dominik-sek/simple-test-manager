@@ -16,10 +16,10 @@ async function bootstrap() {
     origin: 'http://localhost:5173',
   });
   const config = new DocumentBuilder()
-    .setTitle('dupa')
-    .setDescription('dupa')
+    .setTitle('STM')
+    .setDescription('STM')
     .setVersion('1.0')
-    .addTag('dupa')
+    .addTag('STM')
     .build();
   const documentFactory = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, documentFactory);

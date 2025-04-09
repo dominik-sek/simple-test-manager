@@ -14,6 +14,5 @@ export class UserLogService {
         metadata: metadata
       }
     })
-    console.log('saving to logs')
   }
 }

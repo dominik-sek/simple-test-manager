@@ -5,6 +5,7 @@ import Breadcrumbs from './Breadcrumbs';
 interface PageProps {
   children: React.ReactNode;
   title: string;
+  className?: string;
 }
 
 export default function Page(props: PageProps) {
@@ -25,7 +26,7 @@ export default function Page(props: PageProps) {
             <h1 className='text-3xl font-bold text-slate-700'>{props.title}</h1>
           </div>
 
-          <div className='flex flex-1 overflow-auto flex-wrap gap-10 pb-10 '>
+          <div className='overflow-auto py-5 '>
           {props.children}
           </div>
           

@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import {Button} from '@/components/ui/button';
 import { ArrowUpDown } from 'lucide-react';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card.tsx';
 export default function TestProjects() {
 
   const [testProjects, setTestProject] = useState<test_projectModel[]>([]);
@@ -83,10 +84,63 @@ export default function TestProjects() {
       });
   }, []);
 
+  const stats = [
+    {
+      label:"Test collections",
+      count: 4
+    },
+    {
+      label:"Test cases",
+      count: 120
+    },
+    {
+      label:"Test members",
+      count: 12
+    },
+    {
+      label:"Last activity",
+      count: "5 minutes ago"
+    }
+  ]
+
   return (
     <Page title={'Test projects'}>
+      <div className={'flex flex-wrap gap-4'}>
+      {/*<DataTable columns={columns} data={testProjects} />*/}
+      {testProjects?.map((project)=>{
+        return(
+        <Card className={'min-w-96  flex flex-col '}>
+          <CardHeader className={'text-lg '}>
+          <CardTitle>{project.name}</CardTitle>
+          <CardDescription>{project.description}</CardDescription>
+          </CardHeader>
+        <CardContent>
+          <div className={'flex flex-col justify-between'}>
+            {
+              stats.map((stat)=>{
+                  console.log(stat)
+                return(
+                  <div className={'flex justify-between gap-4'}>
+                    <span className={'text-slate-500'}>{stat.label}</span>
 
-      <DataTable columns={columns} data={testProjects} />
+                    <span>{stat.count}</span>
+                  </div>
+                )
+              })
+            }
+
+
+          </div>
+        </CardContent>
+          <CardFooter className={'flex gap-4 justify-end'}>
+            <Button className="">Edit</Button>
+            <Button variant="secondary" className="">View details</Button>
+            <Button variant="outline" className="">Archive</Button>
+          </CardFooter>
+        </Card>
+        )
+      })}
+      </div>
       
     </Page>
   )

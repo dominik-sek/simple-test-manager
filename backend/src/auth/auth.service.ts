@@ -29,6 +29,7 @@ export class AuthService {
     const {password, ...results} = user;
     return results
   }
+
   async getById(id: number) {
     return this.userService.findOne(id)
   }

@@ -25,6 +25,7 @@ export class AuthController {
   async logout(@Req() req: Request) {
     console.log('LOGOUT ATTEMPT:', req.user);
     if(req.user) return null;
+    //todo: add token invalidation
     return this.authService.logout(req.user)
   }
 }

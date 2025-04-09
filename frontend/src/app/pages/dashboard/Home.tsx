@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/chart"
 import { useEffect, useMemo, useState } from 'react';
 import { api } from '@/api/helper.ts';
+import { DataTable } from '@/components/ui/data-table.tsx';
 type TestCaseStatusSummary = {
   total: number;
   grouped: {
@@ -71,72 +72,199 @@ export default function Home(){
 
   return (
     <Page title={'Dashboard'}>
-      <Card className="flex flex-col max-h-fit">
-        <CardHeader className="items-center pb-0 ">
-          <CardTitle>Test cases</CardTitle>
-          <CardDescription></CardDescription>
+      <div className={'w-full grid  grid-flow-row gap-4'}>
+        <Card className={''}>
+        <CardHeader>
+          <CardTitle className={'text-md text-slate-500'}>Active Projects</CardTitle>
         </CardHeader>
-        <CardContent className="flex-1 pb-0 max-h-fit ">
-          {
-            loading
-            ? (
-              <div>Loading...</div>
-              ) : (
-                <ChartContainer
-                  config={chartConfig}
-                  className="mx-auto aspect-square min-h-[250px]!"
-                >
-                  <PieChart>
-                    <ChartTooltip
-                      cursor={false}
-                      content={<ChartTooltipContent hideLabel />}
-                    />
-                    <Pie
-                      data={chartData}
-                      dataKey="count"
-                      nameKey="status"
-                      innerRadius={60}
-                      strokeWidth={5}
-                    >
-                      <Label
-                        content={({ viewBox }) => {
-                          if (viewBox && "cx" in viewBox && "cy" in viewBox) {
-                            return (
-                              <text
-                                x={viewBox.cx}
-                                y={viewBox.cy}
-                                textAnchor="middle"
-                                dominantBaseline="middle"
-                              >
-                                <tspan
+        <CardContent>
+          <span className={'text-3xl'}>
+            5
+          </span>
+        </CardContent>
+        <CardFooter>
+          Trends ^
+        </CardFooter>
+      </Card>
+        <Card className={''}>
+          <CardHeader>
+            <CardTitle className={'text-md text-slate-500'}>Test cases</CardTitle>
+          </CardHeader>
+          <CardContent>
+          <span className={'text-3xl'}>
+            5
+          </span>
+          </CardContent>
+          <CardFooter>
+            Trends ^
+          </CardFooter>
+        </Card>
+        <Card className={''}>
+          <CardHeader>
+            <CardTitle className={'text-md text-slate-500'}>Pass Rate</CardTitle>
+          </CardHeader>
+          <CardContent>
+          <span className={'text-3xl'}>
+            5
+          </span>
+          </CardContent>
+          <CardFooter>
+            Trends ^
+          </CardFooter>
+        </Card>
+        <Card className={''}>
+          <CardHeader>
+            <CardTitle className={'text-md text-slate-500'}>Test runs</CardTitle>
+          </CardHeader>
+          <CardContent>
+          <span className={'text-3xl'}>
+            5
+          </span>
+          </CardContent>
+          <CardFooter>
+            Trends ^
+          </CardFooter>
+        </Card>
+        <Card className="flex h-fit flex-col col-span-2!">
+          <CardHeader className="items-center pb-0 ">
+            <CardTitle>Test cases</CardTitle>
+            <CardDescription></CardDescription>
+          </CardHeader>
+          <CardContent className="flex-1 pb-0! ">
+            {
+              loading
+                ? (
+                  <div>Loading...</div>
+                ) : (
+                  <ChartContainer
+                    config={chartConfig}
+                    className="mx-auto aspect-video"
+                  >
+                    <PieChart>
+                      <ChartTooltip
+                        cursor={false}
+                        content={<ChartTooltipContent hideLabel />}
+                      />
+                      <Pie
+                        data={chartData}
+                        dataKey="count"
+                        nameKey="status"
+                        innerRadius={60}
+                        strokeWidth={5}
+                      >
+                        <Label
+                          content={({ viewBox }) => {
+                            if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                              return (
+                                <text
                                   x={viewBox.cx}
                                   y={viewBox.cy}
-                                  className="fill-foreground text-3xl font-bold"
+                                  textAnchor="middle"
+                                  dominantBaseline="middle"
                                 >
-                                  {totalTestCases}
-                                </tspan>
-                                <tspan
-                                  x={viewBox.cx}
-                                  y={(viewBox.cy || 0) + 24}
-                                  className="fill-muted-foreground"
-                                >
-                                  Testcases
-                                </tspan>
-                              </text>
-                            )
-                          }
-                        }}
+                                  <tspan
+                                    x={viewBox.cx}
+                                    y={viewBox.cy}
+                                    className="fill-foreground text-3xl font-bold"
+                                  >
+                                    {totalTestCases}
+                                  </tspan>
+                                  <tspan
+                                    x={viewBox.cx}
+                                    y={(viewBox.cy || 0) + 24}
+                                    className="fill-muted-foreground"
+                                  >
+                                    Testcases
+                                  </tspan>
+                                </text>
+                              )
+                            }
+                          }}
+                        />
+                      </Pie>
+                    </PieChart>
+                  </ChartContainer>
+                )
+            }
+          </CardContent>
+
+        </Card>
+
+        <Card className="flex flex-col col-span-2!">
+          <CardHeader className="items-center pb-0 ">
+            <CardTitle>Test cases</CardTitle>
+            <CardDescription></CardDescription>
+          </CardHeader>
+          <CardContent className="flex-1 pb-0! ">
+            {
+              loading
+                ? (
+                  <div>Loading...</div>
+                ) : (
+                  <ChartContainer
+                    config={chartConfig}
+                    className="mx-auto aspect-video"
+                  >
+                    <PieChart>
+                      <ChartTooltip
+                        cursor={false}
+                        content={<ChartTooltipContent hideLabel />}
                       />
-                    </Pie>
-                  </PieChart>
-                </ChartContainer>
-              )
-          }
-        </CardContent>
-        {/*<CardFooter>*/}
-        {/*  something*/}
-        {/*</CardFooter>*/}
-      </Card>
+                      <Pie
+                        data={chartData}
+                        dataKey="count"
+                        nameKey="status"
+                        innerRadius={60}
+                        strokeWidth={5}
+                      >
+                        <Label
+                          content={({ viewBox }) => {
+                            if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                              return (
+                                <text
+                                  x={viewBox.cx}
+                                  y={viewBox.cy}
+                                  textAnchor="middle"
+                                  dominantBaseline="middle"
+                                >
+                                  <tspan
+                                    x={viewBox.cx}
+                                    y={viewBox.cy}
+                                    className="fill-foreground text-3xl font-bold"
+                                  >
+                                    {totalTestCases}
+                                  </tspan>
+                                  <tspan
+                                    x={viewBox.cx}
+                                    y={(viewBox.cy || 0) + 24}
+                                    className="fill-muted-foreground"
+                                  >
+                                    Testcases
+                                  </tspan>
+                                </text>
+                              )
+                            }
+                          }}
+                        />
+                      </Pie>
+                    </PieChart>
+                  </ChartContainer>
+                )
+            }
+          </CardContent>
+
+        </Card>
+        <Card className={'col-span-4 p-4'}>
+          Recent test runs
+          <DataTable columns={[]} data={[]} />
+        </Card>
+        <Card className={'col-span-4 p-4'}>
+          Projects
+          <DataTable columns={[]} data={[]} />
+        </Card>
+      </div>
     </Page>
   )
 }
+
+
