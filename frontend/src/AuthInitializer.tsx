@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { loginReducer, logoutReducer, setUser } from '@/store/slices/authSlice';
-import {jwtDecode} from 'jwt-decode';
 import { useAuthDispatch } from './store/hooks';
 import { api } from './api/helper';
 
@@ -14,14 +12,13 @@ interface DecodedToken {
 export default function AuthInitializer({ children }: { children: React.ReactNode; }) {
   console.log('AuthInitializer')
   const [loading, setLoading] = useState(true);
-
   const dispatch = useAuthDispatch();
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    if (token) {
-      try {
-        dispatch(loginReducer({ token }));
+    token && dispatch(loginReducer({ token }))
+    if(!token) window.location.href ="/login"
+    try {
 
         api('/user/me', {
           method:'GET'
@@ -33,7 +30,6 @@ export default function AuthInitializer({ children }: { children: React.ReactNod
         }).finally(() => {
           setLoading(false)
         })
-        
 
       } catch (err) {
         console.warn('Invalid token in localStorage');
@@ -42,9 +38,7 @@ export default function AuthInitializer({ children }: { children: React.ReactNod
         setLoading(false);
 
       }
-    } else {
-      setLoading(false);
-    }
+
   }, []);
 
   if (loading) return null; // Or show a loading spinner

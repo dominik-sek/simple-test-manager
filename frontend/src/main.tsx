@@ -11,9 +11,7 @@ import AuthInitializer from './AuthInitializer';
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <Provider store={store}>
-      <AuthInitializer>
         <RouterProvider router={router} />
-      </AuthInitializer>
       </Provider>
   </StrictMode>
 

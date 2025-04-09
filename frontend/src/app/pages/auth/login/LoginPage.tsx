@@ -14,14 +14,8 @@ import {
 } from "@/components/ui/form";
 
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
 import { loginReducer } from '@/store/slices/authSlice';
-import { AuthDispatch } from '@/store/store';
 import { useAuthDispatch } from '@/store/hooks';
-
-
-
-
 
 export default function LoginPage() {
   const dispatch = useAuthDispatch()
@@ -29,7 +23,9 @@ export default function LoginPage() {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
+    console.log(token);
     if (token) {
+
       window.location.href = '/';
     }
   }, []);
