@@ -23,6 +23,7 @@ export class TestProjectService {
 
   async findAll(id: number) {
     //if admin, return all
+    ///todo: just return all, save user_id as created_by
     const user = await this.prisma.user.findUnique({
       where: {
         id: id

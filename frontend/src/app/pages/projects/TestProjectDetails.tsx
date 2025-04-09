@@ -1,5 +1,4 @@
 import { api } from '@/api/helper';
-import DataCard from '@/components/data-card/DataCard';
 import Page from '@/components/page/Page';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
@@ -22,14 +21,7 @@ export default function TestProjectDetails() {
 
   return (
     <Page title={'Test projects'}>
-      {
-        testProject && 
-           (
-            <DataCard key={testProject.id} title={testProject.name} description={testProject.description} icon={testProject.icon} href={`/projects/${testProject.id}`} />
-          )
-       }
-      
-      
+
     </Page>
   )
 }

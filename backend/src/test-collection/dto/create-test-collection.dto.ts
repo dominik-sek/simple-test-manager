@@ -1,11 +1,13 @@
-import { IsOptional, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateTestCollectionDto {
-    @IsOptional()
-    @IsString()
-    name?: string;
 
-    @IsOptional()
+    @IsNotEmpty()
     @IsString()
-    description?: string;
+    name: string;
+
+    @IsNotEmpty()
+    @IsString()
+    description: string;
+
 }

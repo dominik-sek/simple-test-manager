@@ -13,13 +13,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { ColumnDef } from '@tanstack/react-table';
-import { test_caseModel } from '../../../../../shared';
+import { test_collectionModel } from '../../../../../shared';
 
 
-export default function TestCases() {
-  const [testCases, setTestCases] = useState<test_caseModel[]>([]);
-  console.log(testCases);
-  const columns: ColumnDef<test_caseModel>[] = [
+export default function TestCollections() {
+  const [testCollections, setTestCollections] = useState<test_collectionModel[]>([]);
+  console.log(testCollections);
+  const columns: ColumnDef<test_collectionModel>[] = [
     {
       accessorKey: 'id',
       header:({column})=>{
@@ -36,11 +36,11 @@ export default function TestCases() {
     },
     {
       accessorKey: 'name',
-      header:'Project Name'
+      header:'Collection name'
     },
     {
       accessorKey: 'description',
-      header:'Description'
+      header:'Collection description'
     },
     {
       id:"actions",
@@ -60,12 +60,12 @@ export default function TestCases() {
               <DropdownMenuItem
                 onClick={() => navigator.clipboard.writeText(String(project.name))}
               >
-                Copy project name
+                Copy collection name
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Edit Project</DropdownMenuItem>
-              <DropdownMenuItem>View project</DropdownMenuItem>
-              <DropdownMenuItem>Archive project</DropdownMenuItem>
+              <DropdownMenuItem>Edit</DropdownMenuItem>
+              <DropdownMenuItem>View</DropdownMenuItem>
+              <DropdownMenuItem>Archive</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         )
@@ -74,9 +74,9 @@ export default function TestCases() {
     }
   ]
   useEffect(() => {
-    api('/test-case', { method: 'GET' })
+    api('/test-collection', { method: 'GET' })
       .then((res) => {
-        setTestCases(res);
+        setTestCollections(res);
       })
       .catch((err) => {
         console.error('Failed to fetch test cases:', err);
@@ -87,8 +87,8 @@ export default function TestCases() {
 
 
   return (
-    <Page title={'Test Cases'}>
-      <DataTable columns={columns} data={testCases} />
+    <Page title={'Test Collections'}>
+      <DataTable columns={columns} data={testCollections} />
 
     </Page>
   )

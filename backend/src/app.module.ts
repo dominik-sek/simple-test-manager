@@ -16,6 +16,7 @@ import { RolesGuard } from './guards/roles.guard';
 import { UserLogModule } from './user-log/user-log.module';
 import { UserLogInterceptor } from './interceptors/user-log.interceptor';
 import { TestParameterModule } from './test-parameter/test-parameter.module';
+import { ReportsModule } from './reports/reports.module';
 
 @Module({
   imports: [
@@ -33,7 +34,8 @@ import { TestParameterModule } from './test-parameter/test-parameter.module';
       isGlobal: true
     }),
     UserLogModule,
-    TestParameterModule
+    TestParameterModule,
+    ReportsModule
   ],
 
   controllers: [AppController],

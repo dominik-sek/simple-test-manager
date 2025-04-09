@@ -1,60 +1,80 @@
 import { api } from '@/api/helper';
-import { Button } from '@/components/ui/button'
-import DataTable from '@/components/data-table/DataTable';
 import Page from '@/components/page/Page';
-import { l } from 'node_modules/react-router/dist/development/fog-of-war-1hWhK5ey.d.mts';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
-
+import {test_projectModel} from '../../../../../shared'
+import { ColumnDef } from '@tanstack/react-table';
+import { DataTable } from '@/components/ui/data-table.tsx';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import {Button} from '@/components/ui/button';
+import { ArrowUpDown } from 'lucide-react';
 export default function TestProjects() {
 
-  const [testProjects, setTestProject] = useState<any>(null);
-  const params = useParams();
-  const columns = [
+  const [testProjects, setTestProject] = useState<test_projectModel[]>([]);
+  const columns: ColumnDef<test_projectModel>[] = [
     {
-      key: 'id',
-      label: 'ID'
-    },
-    {
-      key: 'name',
-      label: 'Name'
-    },
-    {
-      key: 'description',
-      label: 'Description'
-    },
-  ]
-  const actions = [
-    {
-      label: 'Edit',
-      icon: 'edit',
-      onClick: (row: any) => {
-        console.log('Edit', row);
+      accessorKey: 'id',
+      header:({column})=>{
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Project ID
+            <ArrowUpDown />
+          </Button>
+        )
       }
     },
     {
-      label: 'Delete',
-      icon: 'delete',
-      onClick: (row: any) => {
-        console.log('Delete', row);
-      }
+      accessorKey: 'name',
+      header:'Project Name'
     },
     {
-      label: 'View',
-      icon: 'view',
-      onClick: (row: any) => {
-        console.log('View', row);
-      }
+      accessorKey: 'description',
+      header:'Description'
+    },
+    {
+      id:"actions",
+      cell:(({row})=>{
+        const project = row.original
+
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                ...
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuItem
+                onClick={() => navigator.clipboard.writeText(String(project.name))}
+              >
+                Copy project name
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>Edit Project</DropdownMenuItem>
+              <DropdownMenuItem>View project</DropdownMenuItem>
+              <DropdownMenuItem>Archive project</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )
+
+      })
     }
-
   ]
-
-
-
-
   useEffect(() => {
     api('/test-project', { method: 'GET' })
       .then((res) => {
+        console.log('fetching projects')
         console.log(res)
         setTestProject(res);
       })
@@ -65,27 +85,8 @@ export default function TestProjects() {
 
   return (
     <Page title={'Test projects'}>
-      {
-        !testProjects || testProjects.length === 0 && (
-          <div className='w-full h-full text-slate-500 items-center justify-center flex flex-col text-2xl '>
-            <span>No projects yet</span>
-            <Button >
-              hello
 
-            </Button>
-          </div>
-        )
-        }
-      {/*
-      <DataTable columns={columns} data={testProject} actions={actions}  />
-       {
-        testProject && testProject.map((project: any) => {
-          project = project.test_project
-          return (
-            <DataCard key={project.id} title={project.name} description={project.description} icon={project.icon} href={`/projects/${project.id}`} />
-          )
-        })
-      } */}
+      <DataTable columns={columns} data={testProjects} />
       
     </Page>
   )

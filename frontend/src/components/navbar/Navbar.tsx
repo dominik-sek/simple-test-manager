@@ -1,13 +1,10 @@
-import { useState } from 'react';
 import ActionButton from './ActionButton';
 import SearchInput from './SearchInput';
 import { navbarItems } from './navbar-items';
 import Profile from './Profile';
-import { useAuthSelector } from '@/store/hooks';
 
 export default function Navbar() {
-  const [profileOpen, setProfileOpen] = useState(false);
-  
+
   return (
     <nav className="h-14 sticky top-0 left-0 w-full flex items-center justify-between px-14 py-10 gap-10 backdrop-blur-2xl">
 
@@ -29,7 +26,7 @@ export default function Navbar() {
 
       </select>
 
-      <Profile isOpen={profileOpen} onClick={() => setProfileOpen(!profileOpen)} />
+      <Profile />
 
     </nav>
   );

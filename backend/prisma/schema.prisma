@@ -2,10 +2,12 @@ generator client {
   provider = "prisma-client-js"
 }
 
-//
-// generator prismaClassGenerator {
-//   provider = "prisma-class-generator"
-// }
+generator prismaTypesGenerator {
+  provider    = "prisma-types-generator"
+  output      = "../../shared"
+  modelSuffix = "Model"
+  prettier    = "false"
+}
 
 datasource db {
   provider = "postgresql"
