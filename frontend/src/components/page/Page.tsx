@@ -1,12 +1,16 @@
 import Navbar from '@/components/navbar/Navbar';
 import { Sidebar } from '@/components/sidebar/Sidebar';
 import Breadcrumbs from './Breadcrumbs';
+import { ReactNode } from 'react';
 
 interface PageProps {
-  children: React.ReactNode;
+  children: ReactNode;
   title: string;
   className?: string;
+  actionBar?: ReactNode
 }
+
+
 
 export default function Page(props: PageProps) {
   return (
@@ -22,8 +26,9 @@ export default function Page(props: PageProps) {
 
           <Breadcrumbs />
 
-          <div>
+          <div className={'flex items-center justify-between'}>
             <h1 className='text-3xl font-bold text-slate-700'>{props.title}</h1>
+            {props.actionBar}
           </div>
 
           <div className='overflow-auto py-5 '>

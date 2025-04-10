@@ -93,7 +93,8 @@ export default function TestCases() {
 
 
 
-
+  //add comboboxes to filter table
+  //add search bar
   return (
     <Page title={'Test Cases'}>
       <DataTable columns={columns} data={testCases} />
