@@ -1,4 +1,3 @@
-import { login } from '@/api/login';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -13,22 +12,25 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-import { useEffect } from 'react';
-import { loginReducer } from '@/store/slices/authSlice';
 import { useAuthDispatch } from '@/store/hooks';
+import { useAuth } from '@/app/hooks/useAuth.ts';
+import { useEffect } from 'react';
+import {useNavigate} from 'react-router';
+import { api } from '@/api/helper.ts';
+import { setUser } from '@/store/slices/authSlice.ts';
+import { PageLoader } from '@/components/page-skeleton/PageLoader.tsx';
 
 export default function LoginPage() {
   const dispatch = useAuthDispatch()
+  const navigate = useNavigate();
+  const { isLoggedIn } = useAuth()
 
+  useEffect(()=>{
+      if(isLoggedIn){
+        navigate('/', { replace: true } )
+      }
+  },[isLoggedIn, navigate])
 
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    console.log(token);
-    if (token) {
-
-      window.location.href = '/';
-    }
-  }, []);
 
   const formSchema = z.object({
     username: z.string().min(2, {
@@ -38,8 +40,6 @@ export default function LoginPage() {
       message: "Password must be at least 2 characters",
     })
   });
-  
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -50,13 +50,23 @@ export default function LoginPage() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+
     try {
-      const token = await login(values.username, values.password)
-      if (token) {
-        dispatch(loginReducer({token: token.access_token}))
-        localStorage.setItem("token", token.access_token)
-        window.location.href = '/'
-      }
+      const token = await api('/auth/login', {
+        method: 'POST',
+        body: JSON.stringify({
+          username: values.username,
+          password: values.password,
+        })
+      })
+      localStorage.setItem("token", token.access_token)
+
+      const userData = await api('/user/me', {
+        method:'GET'
+      })
+
+      dispatch(setUser(userData))
+      //navigate('/')
     } catch (error: any) {
       
       const message = error?.message || "Something went wrong"
@@ -64,9 +74,10 @@ export default function LoginPage() {
       form.setError('password', {
         message: message
       })
-      
     }
-    
+  }
+  if(isLoggedIn){
+    return <PageLoader />
   }
 
   return (

@@ -2,7 +2,7 @@ import { api } from '@/api/helper';
 import { useAuthDispatch } from '@/store/hooks';
 import { logoutReducer } from '@/store/slices/authSlice';
 import { useEffect } from 'react';
-import { Navigate, useNavigate } from 'react-router';
+import { useNavigate } from 'react-router';
 
 
 export default function Logout() {
@@ -23,7 +23,6 @@ export default function Logout() {
         console.error('Failed to logout:', err);
       });
   }, []);
-
 
   return null;
   

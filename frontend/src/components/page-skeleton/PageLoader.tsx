@@ -1,7 +1,7 @@
 import { usePing } from '@/app/hooks/usePing.ts';
 
 export const PageLoader = () =>{
-  const {error, isAlive} = usePing()
+  const {error} = usePing()
 
   if (error) {
     return (

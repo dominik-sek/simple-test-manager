@@ -75,10 +75,11 @@ export default function TestRuns() {
   return (
     <Page title={'Test runs'} actionBar={actionBar()} >
 
-      <Tabs defaultValue="default" className=" h-full w-full">
+      <Tabs defaultValue="default" className=" h-full w-full gap-10 ">
 
-        <TabsList className={"w-full h-full flex flex-col"} >
+        <TabsList className={"w-full h-full flex flex-col p-0 bg-transparent"} >
           <TabsTrigger className='hidden' value={'default'} />
+
           {
             runs.map((run) => {
               return (
@@ -117,7 +118,7 @@ export default function TestRuns() {
             })
           }
 
-        </TabsList>
+          </TabsList>
         <TabsContent value={'default'}>
                 <Card className='p-4'>
                   Nothingness

@@ -11,7 +11,6 @@ import RoleProtectedRoutes from './RoleProtectedRoutes';
 import TestProjectDetails from '@/app/pages/projects/TestProjectDetails';
 import Logout from '@/app/pages/auth/logout/Logout';
 import TestProjectCreate from '@/app/pages/projects/TestProjectCreate';
-import AuthInitializer from '@/AuthInitializer.tsx';
 import TestCollections from '@/app/pages/collections/TestCollections.tsx';
 
 export const router = createBrowserRouter([
@@ -36,11 +35,7 @@ export const router = createBrowserRouter([
     element: <Logout />
   },
   {
-    element: (
-      <AuthInitializer>
-        <ProtectedRoutes />
-      </AuthInitializer>
-    ),
+    element: <ProtectedRoutes />,
     children: [
       {
         path: '/',

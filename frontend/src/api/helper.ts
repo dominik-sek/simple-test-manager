@@ -1,12 +1,12 @@
-export const api = async (url: string, options: RequestInit = {}) => {
+export const api = async (endpoint: string, options: RequestInit = {}) => {
   const token = localStorage.getItem('token');
 
-  const response = await fetch(`/api${url}`, {
+  const response = await fetch(`/api${endpoint}`, {
     ...options,
     headers: {
       ...(options.headers || {}),
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
+      ...(token && {'Authorization': `Bearer ${token}`})
     },
   });
 
@@ -14,6 +14,5 @@ export const api = async (url: string, options: RequestInit = {}) => {
     const error = await response.json().catch(() => null);
     throw new Error(error?.message || 'API Error');
   }
-  const data = await response.json();
-  return data;
+  return await response.json();
 };

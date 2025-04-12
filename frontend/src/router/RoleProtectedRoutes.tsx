@@ -6,7 +6,7 @@ interface RoleProtectedRoutesProps {
 }
 const RoleProtectedRoutes = ({ allowedRoles }: RoleProtectedRoutesProps) => {
   const { role, isLoggedIn } = useAuth()
-  
+  console.log('role protectedRoutes', role, isLoggedIn)
   if (!isLoggedIn || !role) return <Navigate to="/" replace />
 
 	return allowedRoles.includes(role) ? <Outlet /> : <Navigate to="/"  replace />;
