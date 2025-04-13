@@ -39,10 +39,10 @@ export class UserLogInterceptor implements NestInterceptor {
       tap(async () => {
         const timing = Date.now() - start;
         //@ts-ignore
-        await this.userLogService.log(user?.id ?? null, action, 'INFO', {
-          ...logCommon,
-          timing,
-        });
+        // await this.userLogService.log(user?.id ?? null, action, 'INFO', {
+        //   ...logCommon,
+        //   timing,
+        // });
       }),
       catchError( (err) => {
         const timing = Date.now() - start;

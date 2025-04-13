@@ -46,10 +46,6 @@ export const router = createBrowserRouter([
         element: <TestProjects />
       },
       {
-        path: '/projects/create',
-        element: <TestProjectCreate />
-      },
-      {
         path: '/projects/:id',
         loader: async ({ params }) => {
           return params.id;

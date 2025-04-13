@@ -15,6 +15,7 @@ import {
 import {Button} from '@/components/ui/button';
 import { ArrowUpDown } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card.tsx';
+import CreateProjectDialog from '@/app/pages/projects/CreateProjectDialog.tsx';
 export default function TestProjects() {
 
   const [testProjects, setTestProject] = useState<test_projectModel[]>([]);
@@ -141,7 +142,7 @@ export default function TestProjects() {
         )
       })}
       </div>
-      
+      <CreateProjectDialog />
     </Page>
   )
 }
