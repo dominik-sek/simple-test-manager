@@ -18,11 +18,13 @@ import { Toaster } from '@/components/ui/sonner';
 import { toast } from 'sonner';
 import { z } from 'zod';
 import DialogCreate, { FormField } from '@/components/form-dialog/dialog-create.tsx';
+import { useNavigate } from 'react-router';
 
 export default function TestProjects() {
 
   const [testProjects, setTestProject] = useState<test_projectModel[]>([]);
   const [refreshProjects, setRefreshProjects] = useState(false);
+  const navigate = useNavigate();
 
   const columns: ColumnDef<test_projectModel>[] = [
     {
@@ -73,7 +75,9 @@ export default function TestProjects() {
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
-                onClick={() => console.log(project.id)}
+                onClick={() => {
+                  navigate(`/projects/${project.id}`);
+                }}
               >
                 Edit
               </DropdownMenuItem>
@@ -140,7 +144,6 @@ export default function TestProjects() {
     toast.success('Project successfully created');
 
   }
-
 
   return (
     <Page title={'Test projects'}>
