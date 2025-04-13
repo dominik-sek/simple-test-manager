@@ -11,8 +11,17 @@ export const api = async (endpoint: string, options: RequestInit = {}) => {
   });
 
   if (!response.ok) {
-    const error = await response.json().catch(() => null);
-    throw new Error(error?.message || 'API Error');
+    const contentType = response.headers.get('content-type');
+    let errorMessage = `Request failed with status ${response.status}`;
+
+    if (contentType?.includes('application/json')) {
+      const errorData = await response.json();
+      errorMessage = errorData.message || errorMessage;
+    }
+
+    const error = new Error(errorMessage);
+    (error as any).status = response.status;
+    throw error;
   }
   return await response.json();
 };

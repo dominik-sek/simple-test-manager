@@ -14,38 +14,47 @@ import {
 } from "@/components/ui/dropdown-menu"
 import {Button} from '@/components/ui/button';
 import { ArrowUpDown } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card.tsx';
-import CreateProjectDialog from '@/app/pages/projects/CreateProjectDialog.tsx';
+import { Toaster } from '@/components/ui/sonner';
+import { toast } from 'sonner';
+import { z } from 'zod';
+import DialogCreate, { FormField } from '@/components/form-dialog/dialog-create.tsx';
+
 export default function TestProjects() {
 
   const [testProjects, setTestProject] = useState<test_projectModel[]>([]);
+  const [refreshProjects, setRefreshProjects] = useState(false);
+
   const columns: ColumnDef<test_projectModel>[] = [
     {
       accessorKey: 'id',
-      header:({column})=>{
+      header: ({ column }) => {
         return (
           <Button
             variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           >
             ID
             <ArrowUpDown />
           </Button>
-        )
-      }
+        );
+      },
+    },
+    {
+      accessorKey: 'prefix',
+      header: 'Prefix',
     },
     {
       accessorKey: 'name',
-      header:'Name'
+      header: 'Name',
     },
     {
       accessorKey: 'description',
-      header:'Description'
+      header: 'Description',
     },
     {
-      id:"actions",
-      cell:(({row})=>{
-        const project = row.original
+      id: 'actions',
+      cell: (({ row }) => {
+        const project = row.original;
 
         return (
           <DropdownMenu>
@@ -56,93 +65,103 @@ export default function TestProjects() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuLabel>Settings</DropdownMenuLabel>
               <DropdownMenuItem
                 onClick={() => navigator.clipboard.writeText(String(project.name))}
               >
                 Copy name
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Edit</DropdownMenuItem>
-              <DropdownMenuItem>View</DropdownMenuItem>
-              <DropdownMenuItem>Archive</DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => console.log(project.id)}
+              >
+                Edit
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => console.log(project.id)}
+              >Archive</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-        )
+        );
 
-      })
-    }
-  ]
+      }),
+    },
+  ];
+
   useEffect(() => {
     api('/test-project', { method: 'GET' })
       .then((res) => {
-        console.log('fetching projects')
-        console.log(res)
         setTestProject(res);
       })
       .catch((err) => {
+        toast.error(err.message);
         console.error('Failed to fetch projects:', err);
       });
-  }, []);
+  }, [refreshProjects]);
 
-  const stats = [
+  const triggerRefresh = () => {
+    console.log('triggering refresh')
+    setRefreshProjects((prev) => !prev);
+  };
+
+  const formSchema = z.object({
+    name: z.string().min(2, {
+      message: 'Name must be at least 2 characters.',
+    }),
+    prefix: z.string()
+      .min(1, { message: 'Prefix must be at least 1 character' })
+      .max(6, { message: 'Prefix must have no more than 6 characters' }),
+    description: z.string(),
+  });
+
+  const formFields:FormField[] = [
     {
-      label:"Test collections",
-      count: 4
+      name:"name",
+      label:"Name",
+      placeholder:"Project name",
     },
     {
-      label:"Test cases",
-      count: 120
+      name:"prefix",
+      label:"Prefix",
+      placeholder:"Project prefix eg. TST",
     },
     {
-      label:"Test members",
-      count: 12
-    },
-    {
-      label:"Last activity",
-      count: "5 minutes ago"
+      name:"description",
+      label:"Description",
+      placeholder:"Project description",
+      type:"textarea"
     }
   ]
+  const submitHandler = async (values: z.infer<typeof formSchema>) => {
+    await api('/test-project',{method: 'POST', body: JSON.stringify({
+        name: values.name,
+        description: values.description
+      })})
+    toast.success('Project successfully created');
+
+  }
+
 
   return (
     <Page title={'Test projects'}>
+
+
       <div className={'flex flex-wrap gap-4'}>
-      {/*<DataTable columns={columns} data={testProjects} />*/}
-      {testProjects?.map((project)=>{
-        return(
-        <Card className={'min-w-96  flex flex-col '}>
-          <CardHeader className={'text-lg '}>
-          <CardTitle>{project.name}</CardTitle>
-          <CardDescription>{project.description}</CardDescription>
-          </CardHeader>
-        <CardContent>
-          <div className={'flex flex-col justify-between'}>
-            {
-              stats.map((stat)=>{
-                  console.log(stat)
-                return(
-                  <div className={'flex justify-between gap-4'}>
-                    <span className={'text-slate-500'}>{stat.label}</span>
-
-                    <span>{stat.count}</span>
-                  </div>
-                )
-              })
-            }
-
-
-          </div>
-        </CardContent>
-          <CardFooter className={'flex gap-4 justify-end'}>
-            <Button className="">Edit</Button>
-            <Button variant="secondary" className="">View details</Button>
-            <Button variant="outline" className="">Archive</Button>
-          </CardFooter>
-        </Card>
-        )
-      })}
+      <DataTable columns={columns} data={testProjects}>
+        <DialogCreate
+          buttonText={'New project'}
+          dialogTitle={'New project'}
+          dialogDescription={'Create a new project'}
+          submitButtonText={'Create'}
+          formSchema={formSchema}
+          onCreated={triggerRefresh}
+          submitHandler={submitHandler}
+          formFields={formFields}
+        />
+      </DataTable>
+        <Toaster richColors />
       </div>
-      <CreateProjectDialog />
+
     </Page>
   )
 }

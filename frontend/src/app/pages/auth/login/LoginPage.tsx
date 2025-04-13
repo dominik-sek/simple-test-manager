@@ -46,7 +46,6 @@ export default function LoginPage() {
       username: "",
       password: ""
     },
-    
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -69,7 +68,7 @@ export default function LoginPage() {
       //navigate('/')
     } catch (error: any) {
       
-      const message = error?.message || "Something went wrong"
+      const message = "Something went wrong, try again later"
       form.setError('username', {})
       form.setError('password', {
         message: message

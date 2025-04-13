@@ -3,6 +3,7 @@ import { sidebarItems } from './sidebar-items';
 import SidebarButton from './SidebarButton';
 import { api } from '@/api/helper';
 import { jwtDecode } from 'jwt-decode';
+import { Separator } from "@/components/ui/separator"
 
 
 export function Sidebar() {
@@ -27,15 +28,18 @@ export function Sidebar() {
   }, []);
   return (
     <div className='p-8 pt-5 w-72 shadow-md flex flex-col bg-white gap-10 fixed top-0 left-0 h-screen overflow-auto'>
-      <div className='flex flex-col justify-between'>
+      <div className='flex flex-col justify-between gap-5'>
         <div className='max-h-14'>
           <h1 className='text-3xl font-bold'>STM</h1>
           <h2 className='text-md font-semibold text-black/30'>Company name</h2>
         </div>
 
-        <div className='flex flex-col py-10'>
-          report a bug button
+        <Separator orientation='horizontal' />
+        <div className='flex '>
+          <div>squareName</div>
+          <div>projectName</div>
         </div>
+        <Separator orientation='horizontal' />
 
         <nav className='mt-4'>
           <ul className='space-y-2'>

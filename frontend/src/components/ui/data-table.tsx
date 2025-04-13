@@ -21,9 +21,10 @@ import { Input } from '@/components/ui/input.tsx';
 interface DataTableProps <TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
+  children?: React.ReactNode
 }
 
-export function DataTable<TData, TValue>( { columns, data }: DataTableProps<TData, TValue>){
+export function DataTable<TData, TValue>( { columns, data, children }: DataTableProps<TData, TValue>){
 
   const [sorting, setSorting] = useState<SortingState>([])
   const [globalFilter, setGlobalFilter] = useState<any>([])
@@ -44,18 +45,37 @@ export function DataTable<TData, TValue>( { columns, data }: DataTableProps<TDat
     },
   })
 
-
   return(
-    <div className={'w-full'}>
-    <div className="flex items-center min-w-full py-4">
+    <div className={'w-full border '}>
+    <div className="flex items-center gap-5 min-w-full py-4">
       <Input
         placeholder="Filter..."
         value={(globalFilter ) ?? ""}
         onChange={(event) => table.setGlobalFilter(String(event.target.value)) }
-        className="max-w-sm"
+        className="max-w-sm border-slate-300"
       />
+      {children}
     </div>
-      <div className={'rounded-md border '}>
+      <div className="flex items-center justify-end space-x-2 py-4">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => table.previousPage()}
+          disabled={!table.getCanPreviousPage()}
+        >
+          Previous
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
+        >
+          Next
+        </Button>
+      </div>
+
+      <div className={'rounded-md border p-2'}>
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup)=>(
@@ -99,24 +119,7 @@ export function DataTable<TData, TValue>( { columns, data }: DataTableProps<TDat
             }
           </TableBody>
         </Table>
-        <div className="flex items-center justify-end space-x-2 py-4">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            Next
-          </Button>
-        </div>
+
       </div>
     </div>
   )
