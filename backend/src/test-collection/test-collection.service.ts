@@ -2,15 +2,35 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTestCollectionDto } from './dto/create-test-collection.dto';
 import { UpdateTestCollectionDto } from './dto/update-test-collection.dto';
 import {PrismaService} from "../prisma/prisma.service";
+import { test_collection } from '@prisma/client';
 
 @Injectable()
 export class TestCollectionService {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(createTestCollectionDto: CreateTestCollectionDto) {
-    return this.prisma.test_collection.create({
-      data: createTestCollectionDto
+  async create(createTestCollectionDto: CreateTestCollectionDto) {
+    
+    console.log(createTestCollectionDto)
+    
+    const { project_id, ...createTestCollectionDtoWithoutProjectId } = createTestCollectionDto
+
+    const testCollection = await this.prisma.test_collection.create({
+      data: createTestCollectionDtoWithoutProjectId
     })
+
+
+    if (project_id) {
+      console.log(`trying to create ${testCollection.id} inside project ${project_id}`)
+      await this.prisma.test_project_collection.create({
+        data: {
+          test_collection_id: testCollection.id,
+          test_project_id: project_id
+        }
+      })
+
+    }
+
+    return testCollection
   }
 
   findAll() {
@@ -24,7 +44,7 @@ export class TestCollectionService {
         id: id
       },
       include:{
-        test_collection_test_case:true,
+        test_collection_test_case: true,
         test_project_collection: true,
       }
     })

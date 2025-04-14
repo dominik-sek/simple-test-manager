@@ -22,13 +22,8 @@ import {
 import { z, ZodObject, ZodRawShape } from 'zod';
 import { FieldValues, useForm,  } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import type { DialogFormField } from '@/types/CreateDialogFormField';
 
-export type FormField = {
-  name: string,
-  label: string,
-  placeholder: string,
-  type?: 'text' | 'textarea',
-}
 interface CreateDialogProps<Tschema extends ZodObject<ZodRawShape>, TFieldValues extends FieldValues = z.infer<Tschema>> {
   buttonText: string;
   dialogTitle: string;
@@ -38,7 +33,7 @@ interface CreateDialogProps<Tschema extends ZodObject<ZodRawShape>, TFieldValues
   //form: UseFormReturn<TFieldValues, any, TFieldValues>
   //defaultValues:  DefaultValues<z.infer<Tschema>>
   submitHandler: (values: TFieldValues) => Promise<void>;
-  formFields: FormField[];
+  formFields: DialogFormField[];
   onCreated: ()=>void;
 }
 

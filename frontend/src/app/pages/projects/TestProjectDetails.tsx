@@ -3,12 +3,18 @@ import Page from '@/components/page/Page';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { PageLoader } from '@/components/page-skeleton/PageLoader.tsx';
+import DialogCreate from '@/components/form-dialog/dialog-create';
+import { z } from 'zod';
+import {test_collectionModel, test_projectModel} from '../../../../../shared'
+import { DialogFormField } from '@/types/CreateDialogFormField';
+import { toast } from 'sonner';
+
 
 export default function TestProjectDetails() {
 
-  const [testProject, setTestProject] = useState<any>({});
+  const [testProject, setTestProject] = useState<test_projectModel>();
   const [loading, setLoading] = useState(true);
-
+  const [refresh, setRefresh] = useState(false);
   const params = useParams();
   const navigate = useNavigate();
 
@@ -22,12 +28,60 @@ export default function TestProjectDetails() {
         setLoading(false);
         console.error('Failed to fetch projects:', err);
       });
-  }, [navigate]);
+  }, [navigate, refresh]);
+
+  const triggerRefresh = () => {
+    console.log('triggering refresh')
+    setRefresh((prev) => !prev);
+  };
+
+  const formSchema = z.object({
+    name: z.string().min(2, {
+      message: 'Name must be at least 2 characters.',
+    }),
+    description: z.string(),
+  });
+  
+
+  const formFields:DialogFormField<test_collectionModel>[] = [
+    {
+      name: "name",
+      label: "Name",
+      placeholder:"Test collection name"
+      
+    },
+    {
+      name:"description",
+      label:"Description",
+      placeholder:"Test collection description",
+      type:"textarea"
+    }
+  ]
+  const submitHandler = async (values: z.infer<typeof formSchema>) => {
+    await api('/test-collection',{method: 'POST', body: JSON.stringify({
+        name: values.name,
+        description: values.description,
+        project_id: Number(params.id)
+    })
+    })
+    //todo: add text styling inside toast
+    toast.success(`Created ${values.name} inside ${testProject?.name}`);
+
+  }
 
   if(loading) return <PageLoader />;
   return (
-    <Page title={testProject.name}>
-        Hello {testProject.name}!
+    <Page title={testProject?.name}>
+        Hello {testProject?.name}!
+      <DialogCreate
+        buttonText='New collection'
+        dialogDescription='Create a new test collection'
+        dialogTitle='New collection'
+        formFields={formFields}
+        formSchema={formSchema}
+        onCreated={triggerRefresh}
+        submitButtonText='Create'
+        submitHandler={submitHandler}      />
     </Page>
   )
 }

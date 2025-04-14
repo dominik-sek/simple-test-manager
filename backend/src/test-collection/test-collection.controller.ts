@@ -22,6 +22,7 @@ export class TestCollectionController {
   findOne(@Param('id') id: string) {
     return this.testCollectionService.findOne(+id);
   }
+  
   @Post('cases/:id')
   addCasesToCollection(
     @Param('id', ParseIntPipe) collectionId: number,

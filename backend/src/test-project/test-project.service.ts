@@ -8,7 +8,6 @@ export class TestProjectService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(createTestProjectDto: CreateTestProjectDto, userId: number) {
-    //need to get user id, then create inside joined table i think?
     const project = await this.prisma.test_project.create({
       data: createTestProjectDto,
     })

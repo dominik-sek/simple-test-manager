@@ -14,11 +14,11 @@ import {
 } from "@/components/ui/dropdown-menu"
 import {Button} from '@/components/ui/button';
 import { ArrowUpDown } from 'lucide-react';
-import { Toaster } from '@/components/ui/sonner';
 import { toast } from 'sonner';
 import { z } from 'zod';
-import DialogCreate, { FormField } from '@/components/form-dialog/dialog-create.tsx';
+import DialogCreate from '@/components/form-dialog/dialog-create.tsx';
 import { useNavigate } from 'react-router';
+import { DialogFormField } from '@/types/CreateDialogFormField';
 
 export default function TestProjects() {
 
@@ -52,6 +52,20 @@ export default function TestProjects() {
     {
       accessorKey: 'description',
       header: 'Description',
+    },
+    {
+      accessorKey: 'test_project_collection.length',
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          >
+            Test collections
+            <ArrowUpDown />
+          </Button>
+        );
+      },
     },
     {
       id: 'actions',
@@ -95,6 +109,7 @@ export default function TestProjects() {
   useEffect(() => {
     api('/test-project', { method: 'GET' })
       .then((res) => {
+        console.log(res)
         setTestProject(res);
       })
       .catch((err) => {
@@ -118,7 +133,7 @@ export default function TestProjects() {
     description: z.string(),
   });
 
-  const formFields:FormField[] = [
+  const formFields:DialogFormField[] = [
     {
       name:"name",
       label:"Name",
@@ -142,7 +157,6 @@ export default function TestProjects() {
         description: values.description
       })})
     toast.success('Project successfully created');
-
   }
 
   return (
@@ -162,7 +176,6 @@ export default function TestProjects() {
           formFields={formFields}
         />
       </DataTable>
-        <Toaster richColors />
       </div>
 
     </Page>

@@ -2,6 +2,7 @@ import Navbar from '@/components/navbar/Navbar';
 import { Sidebar } from '@/components/sidebar/Sidebar';
 import Breadcrumbs from './Breadcrumbs';
 import { ReactNode } from 'react';
+import { Toaster } from 'sonner';
 
 interface PageProps {
   children: ReactNode;
@@ -16,6 +17,7 @@ export default function Page(props: PageProps) {
   return (
 
     <div className='flex flex-row w-full h-screen bg-slate-200 '>
+      <Toaster richColors  />
 
       <Sidebar />
 
