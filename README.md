@@ -2,18 +2,6 @@
 # ⚠️ Currently WIP ⚠️
 > This project is a **work in progress**. Features, structure, and documentation are still evolving.
 
----
-
-# 🧪 Simple Test Case Manager
-
-A lightweight, no-nonsense test management tool for teams or testers who just want to start testing while documenting their progress — without drowning in enterprise bloat.
-
-# 🤔 Why another test manager?
-Most open-source and enterprise tools are bloated, overengineered, and sometimes feel like they’re designed to slow you down.
-
-You end up writing pages of single-use documents instead of actually testing.
-And enterprise solutions? Often overpriced, and not even that good.
-
 # 🎯 Main features
 Built using React.js and NestJS
 
