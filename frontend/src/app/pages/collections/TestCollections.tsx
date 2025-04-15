@@ -136,28 +136,25 @@ export default function TestCollections() {
   return (
     <Page title={'Test Collections'}>
 
-      <DialogCreate
-        buttonText='New collection'
-        dialogDescription='Create a new test collection'
-        dialogTitle='New collection'
-        formFields={formFields}
-        formSchema={formSchema}
-        onCreated={triggerRefresh}
-        submitButtonText='Create'
-        submitHandler={submitHandler} />
-
-
-
-
       {
-             loading ?
-             (
-               <InlineLoader />
-             ) : (
-               <DataTable columns={columns} data={testCollections} />
-             )
-   
- }
+        loading ?
+          (
+            <InlineLoader />
+          ) : (
+            <DataTable columns={columns} data={testCollections}>
+              <DialogCreate
+                buttonText='New collection'
+                dialogDescription='Create a new test collection'
+                dialogTitle='New collection'
+                formFields={formFields}
+                formSchema={formSchema}
+                onCreated={triggerRefresh}
+                submitButtonText='Create'
+                submitHandler={submitHandler} />
+            </DataTable>
+          )
+
+      }
     </Page>
   );
 }

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { Key, useState } from 'react';
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -23,6 +23,8 @@ import { z, ZodObject, ZodRawShape } from 'zod';
 import { FieldValues, useForm,  } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { DialogFormField } from '@/types/CreateDialogFormField';
+import Markdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 
 interface CreateDialogProps<Tschema extends ZodObject<ZodRawShape>, TFieldValues extends FieldValues = z.infer<Tschema>> {
   buttonText: string;
@@ -80,7 +82,19 @@ export default function CreateProjectDialog<T extends ZodObject<ZodRawShape>>({
     resolver: zodResolver(formSchema)
   })
 
+  const markdown = `A paragraph with *emphasis* and **strong importance**.
 
+  > A block quote with ~strikethrough~ and a URL: https://reactjs.org.
+  
+  * Lists
+  * [ ] todo
+  * [x] done
+  
+  A table:
+  
+  | a | b |
+  | - | - |
+  `
   return (
     <Dialog open={openModal} onOpenChange={(isOpen)=>{
       setOpenModal(isOpen)
@@ -107,7 +121,7 @@ export default function CreateProjectDialog<T extends ZodObject<ZodRawShape>>({
             {formFields.map((formField)=>{
               return(
                 <FormField
-                  key={formField.name}
+                  key={formField.name as Key}
                   control={form.control}
                   // @ts-expect-error
                   name={formField.name}
@@ -131,7 +145,9 @@ export default function CreateProjectDialog<T extends ZodObject<ZodRawShape>>({
                   )} />
               )
             })}
-
+            <Markdown remarkPlugins={[remarkGfm]}>
+              {markdown}
+            </Markdown>
             <FormMessage>
               {form.formState.errors.root?.formError.message}
             </FormMessage>
