@@ -9,7 +9,6 @@ export const useAuth = () => {
   let isExpired = false;
   let decodedToken = null;
 
-  // Check token validity
   if (token) {
     try {
       decodedToken = jwtDecode<DecodedToken>(token);
@@ -21,16 +20,14 @@ export const useAuth = () => {
       isExpired = true;
     }
   }
-  console.log(user);
-  // Determine logged in status - require both valid token and user data
   const isLoggedIn = Boolean(token && !isExpired && user);
 
   return {
     isLoggedIn,
     isExpired,
-    user,  // Return the full user object for convenience
+    user,  
     role: user?.role || null,
-    token,  // Could be useful to access in some cases
-    tokenData: decodedToken  // Access to decoded token data if needed
+    token,  
+    tokenData: decodedToken 
   };
 };

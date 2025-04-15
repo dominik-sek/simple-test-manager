@@ -16,15 +16,15 @@ interface PageProps {
 export default function Page(props: PageProps) {
   return (
 
-    <div className='flex flex-row w-full h-screen bg-slate-200 '>
+    <div className='flex flex-row w-full h-screen  '>
       <Toaster richColors  />
 
       <Sidebar />
 
-      <div className="w-full bg-slate-200 flex flex-col relative ml-72 ">
+      <div className="w-full flex flex-col relative ml-72 flex-1 ">
         <Navbar />
 
-        <div className='pt-14 px-14 gap-4 flex flex-col flex-1 overflow-hidden'>
+        <div className='py-14 px-14 gap-4 flex flex-col bg-slate-200 flex-1'>
 
           <Breadcrumbs />
 
@@ -33,7 +33,7 @@ export default function Page(props: PageProps) {
             {props.actionBar}
           </div>
 
-          <div className='overflow-auto py-5 '>
+          <div className='flex-1'>
           {props.children}
           </div>
           

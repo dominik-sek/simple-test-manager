@@ -19,4 +19,3 @@ useEffect(()=>{
 })
   return {error, isAlive}
 }
-

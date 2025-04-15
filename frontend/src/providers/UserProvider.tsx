@@ -3,7 +3,8 @@ import { useAuthDispatch } from '@/store/hooks';
 import { setUser, logoutReducer } from '@/store/slices/authSlice';
 import { api } from '@/api/helper';
 import { jwtDecode } from 'jwt-decode';
-import { PageLoader } from '@/components/page-skeleton/PageLoader';
+import { PageLoader } from '@/components/page-loaders/PageLoader';
+import InlineLoader from '@/components/page-loaders/InlineLoader';
 
 
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
@@ -40,5 +41,15 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
   if (loading) return <PageLoader />;
 
-  return <>{children}</>;
+  return (
+    <>
+      {loading ? (
+        <InlineLoader />
+      ) : (
+          children
+      )}
+      
+    </>
+  )
+  
 };

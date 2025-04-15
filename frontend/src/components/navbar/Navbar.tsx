@@ -6,7 +6,7 @@ import Profile from './Profile';
 export default function Navbar() {
 
   return (
-    <nav className="h-14 sticky top-0 left-0 w-full flex items-center justify-between px-14 py-10 gap-10 backdrop-blur-2xl">
+    <nav className="h-14 sticky top-0 left-0 w-full flex items-center justify-between px-14 py-10 gap-10 backdrop-blur-2xl bg-slate-300 z-10">
 
       <div className='flex items-center gap-10 w-full'>
         <SearchInput />

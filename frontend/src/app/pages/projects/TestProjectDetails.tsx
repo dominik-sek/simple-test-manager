@@ -2,12 +2,13 @@ import { api } from '@/api/helper';
 import Page from '@/components/page/Page';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
-import { PageLoader } from '@/components/page-skeleton/PageLoader.tsx';
+import { PageLoader } from '@/components/page-loaders/PageLoader';
 import DialogCreate from '@/components/form-dialog/dialog-create';
 import { z } from 'zod';
 import {test_collectionModel, test_projectModel} from '../../../../../shared'
 import { DialogFormField } from '@/types/CreateDialogFormField';
 import { toast } from 'sonner';
+import InlineLoader from '@/components/page-loaders/InlineLoader';
 
 
 export default function TestProjectDetails() {
@@ -69,19 +70,24 @@ export default function TestProjectDetails() {
 
   }
 
-  if(loading) return <PageLoader />;
+  // if(loading) return <PageLoader />;
   return (
     <Page title={testProject?.name}>
-        Hello {testProject?.name}!
-      <DialogCreate
-        buttonText='New collection'
-        dialogDescription='Create a new test collection'
-        dialogTitle='New collection'
-        formFields={formFields}
-        formSchema={formSchema}
-        onCreated={triggerRefresh}
-        submitButtonText='Create'
-        submitHandler={submitHandler}      />
+      {
+        loading ? (
+          <InlineLoader />
+        ) : (
+          <DialogCreate
+            buttonText='New collection'
+            dialogDescription='Create a new test collection'
+            dialogTitle='New collection'
+            formFields={formFields}
+            formSchema={formSchema}
+            onCreated={triggerRefresh}
+            submitButtonText='Create'
+            submitHandler={submitHandler}      />
+        )
+      }
     </Page>
   )
 }

@@ -18,7 +18,8 @@ import { useEffect } from 'react';
 import {useNavigate} from 'react-router';
 import { api } from '@/api/helper.ts';
 import { setUser } from '@/store/slices/authSlice.ts';
-import { PageLoader } from '@/components/page-skeleton/PageLoader.tsx';
+import InlineLoader from '../../../../components/page-loaders/InlineLoader';
+import { PageLoader } from '@/components/page-loaders/PageLoader';
 
 export default function LoginPage() {
   const dispatch = useAuthDispatch()

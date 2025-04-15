@@ -84,7 +84,18 @@ export default function Home(){
           <DataTable columns={[]} data={[]} />
         </Card>
         </div>
+        <div className={'flex flex-col gap-5'}>
 
+          //recently used projects/cases
+        <Card className={'col-span-4 p-4'}>
+          Recent test runs
+          <DataTable columns={[]} data={[]} />
+        </Card>
+        <Card className={'col-span-4 p-4'}>
+          Projects
+          <DataTable columns={[]} data={[]} />
+        </Card>
+        </div>
     </Page>
   )
 }

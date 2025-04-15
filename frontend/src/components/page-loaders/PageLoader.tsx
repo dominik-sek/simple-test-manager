@@ -1,9 +1,8 @@
 import { usePing } from '@/app/hooks/usePing.ts';
-import { createPortal } from 'react-dom';
 
 export const PageLoader = () =>{
   const {error} = usePing()
-
+  console.log('page loader')
   if (error) {
     return (
       <div className="h-screen w-screen flex items-center justify-center bg-slate-200">
