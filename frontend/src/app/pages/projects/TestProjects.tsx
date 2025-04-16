@@ -1,7 +1,7 @@
 import { api } from '@/api/helper';
 import Page from '@/components/page/Page';
 import { useEffect, useState } from 'react';
-import {test_projectModel} from '../../../../../shared'
+import { test_projectModel } from '../../../../../shared';
 import { ColumnDef } from '@tanstack/react-table';
 import { DataTable } from '@/components/ui/data-table.tsx';
 import {
@@ -11,8 +11,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import {Button} from '@/components/ui/button';
+} from "@/components/ui/dropdown-menu";
+import { Button } from '@/components/ui/button';
 import { ArrowUpDown } from 'lucide-react';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -109,7 +109,7 @@ export default function TestProjects() {
   useEffect(() => {
     api('/test-project', { method: 'GET' })
       .then((res) => {
-        console.log(res)
+        console.log(res);
         setTestProject(res);
       })
       .catch((err) => {
@@ -119,7 +119,7 @@ export default function TestProjects() {
   }, [refreshProjects]);
 
   const triggerRefresh = () => {
-    console.log('triggering refresh')
+    console.log('triggering refresh');
     setRefreshProjects((prev) => !prev);
   };
 
@@ -133,51 +133,53 @@ export default function TestProjects() {
     description: z.string(),
   });
 
-  const formFields:DialogFormField[] = [
+  const formFields: DialogFormField[] = [
     {
-      name:"name",
-      label:"Name",
-      placeholder:"Project name",
+      name: "name",
+      label: "Name",
+      placeholder: "Project name",
     },
     {
-      name:"prefix",
-      label:"Prefix",
-      placeholder:"Project prefix eg. TST",
+      name: "prefix",
+      label: "Prefix",
+      placeholder: "Project prefix eg. TST",
     },
     {
-      name:"description",
-      label:"Description",
-      placeholder:"Project description",
-      type:"textarea"
+      name: "description",
+      label: "Description",
+      placeholder: "Project description",
+      type: "textarea"
     }
-  ]
+  ];
   const submitHandler = async (values: z.infer<typeof formSchema>) => {
-    await api('/test-project',{method: 'POST', body: JSON.stringify({
+    await api('/test-project', {
+      method: 'POST', body: JSON.stringify({
         name: values.name,
         description: values.description
-      })})
+      })
+    });
     toast.success('Project successfully created');
-  }
+  };
 
   return (
     <Page title={'Test projects'}>
 
 
       <div className={'flex flex-wrap gap-4'}>
-      <DataTable columns={columns} data={testProjects}>
-        <DialogCreate
-          buttonText={'New project'}
-          dialogTitle={'New project'}
-          dialogDescription={'Create a new project'}
-          submitButtonText={'Create'}
-          formSchema={formSchema}
-          onCreated={triggerRefresh}
-          submitHandler={submitHandler}
-          formFields={formFields}
-        />
-      </DataTable>
+        <DataTable columns={columns} data={testProjects}>
+          <DialogCreate
+            buttonText={'New project'}
+            dialogTitle={'New project'}
+            dialogDescription={'Create a new project'}
+            submitButtonText={'Create'}
+            formSchema={formSchema}
+            onCreated={triggerRefresh}
+            submitHandler={submitHandler}
+            formFields={formFields}
+          />
+        </DataTable>
       </div>
 
     </Page>
-  )
+  );
 }

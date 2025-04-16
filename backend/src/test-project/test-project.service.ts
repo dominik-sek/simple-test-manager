@@ -23,36 +23,62 @@ export class TestProjectService {
   async findAll(id: number) {
     //if admin, return all
     ///todo: just return all, save user_id as created_by
-    const user = await this.prisma.user.findUnique({
-      where: {
-        id: id
-      },
-      select:{
-        role: true
-      }
-    })
-    if(user.role == 'admin'){
-      return this.prisma.test_project.findMany({
-        select:{
-          id: true,
-          name: true,
-          description: true,
-          test_project_user: true,
-          test_project_collection: true,
-          _count: true
+    // const user = await this.prisma.user.findUnique({
+    //   where: {
+    //     id: id
+    //   },
+    //   select:{
+    //     role: true
+    //   }
+    // })
+    // if(user.role == 'admin'){
+      // this.prisma.test_project.findMany({
+      //   select:{
+      //     id: true,
+      //     name: true,
+      //     description: true,
+      //     test_project_user: true,
+      //     test_project_collection: {
+      //       include: {
+      //         test_collection: true
+      //       }
+      //     }
+      //   }
+
+      // })
+    
+    const testProjectsRaw = await this.prisma.test_project.findMany({
+      select: {
+        id: true, //need keys to map on frontend
+        name: true,
+        description: true,
+        test_project_collection: {
+          select: {
+            test_collection: true
+          }
         }
-
-      })
-    }
-
-    return this.prisma.test_project_user.findMany({
-      where:{
-        user_id: id
       },
-      select:{
-        test_project: true
-      }
     })
+    const testProjects = testProjectsRaw.map((project) => (
+      {
+        id: project.id,
+        name: project.description,
+        description: project.description,
+        test_collections: project.test_project_collection.map((collection)=> collection.test_collection)
+      }
+    ))
+    return testProjects
+    
+    // }
+
+    // return this.prisma.test_project_user.findMany({
+    //   where:{
+    //     user_id: id
+    //   },
+    //   select:{
+    //     test_project: true
+    //   }
+    // })
   }
 
   async findOne(id: number) {

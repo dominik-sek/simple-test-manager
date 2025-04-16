@@ -1,23 +1,26 @@
 import Navbar from '@/components/navbar/Navbar';
 import { Sidebar } from '@/components/sidebar/Sidebar';
-import Breadcrumbs from './Breadcrumbs';
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import { Toaster } from 'sonner';
+import InlineLoader from '../page-loaders/InlineLoader';
 
 interface PageProps {
   children: ReactNode;
   title: string;
   className?: string;
-  actionBar?: ReactNode
+  actionBar?: ReactNode;
+  loading?: React.SetStateAction<boolean>;
 }
 
 
 
 export default function Page(props: PageProps) {
+  
+
   return (
 
     <div className='flex flex-row w-full h-screen  '>
-      <Toaster richColors  />
+      <Toaster richColors />
 
       <Sidebar />
 
@@ -26,7 +29,6 @@ export default function Page(props: PageProps) {
 
         <div className='py-14 px-14 gap-4 flex flex-col bg-slate-200 flex-1'>
 
-          <Breadcrumbs />
 
           <div className={'flex items-center justify-between'}>
             <h1 className='text-3xl font-bold text-slate-700'>{props.title}</h1>
@@ -34,9 +36,15 @@ export default function Page(props: PageProps) {
           </div>
 
           <div className='flex-1'>
-          {props.children}
+            {props.loading ? (
+              <InlineLoader />
+            ) : (
+              props.children
+            )
+            }
+            
           </div>
-          
+
         </div>
 
       </div>

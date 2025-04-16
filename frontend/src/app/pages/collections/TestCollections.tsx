@@ -13,16 +13,21 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ColumnDef } from '@tanstack/react-table';
-import { test_collectionModel } from '../../../../../shared';
+import { test_collectionModel, test_projectModel } from '../../../../../shared';
 import InlineLoader from '@/components/page-loaders/InlineLoader';
 import DialogCreate from '@/components/form-dialog/dialog-create';
 import { toast } from 'sonner';
 import { DialogFormField } from '@/types/CreateDialogFormField';
 import { z } from 'zod';
+import { Input } from '@/components/ui/input';
 
-
+type testProject = test_projectModel & {
+  test_collections: test_collectionModel[]
+}
 export default function TestCollections() {
   const [testCollections, setTestCollections] = useState<test_collectionModel[]>([]);
+  const [testProjects, setTestProjects] = useState<testProject[]>();
+
   const [refresh, setRefresh] = useState(false);
   const [loading, setLoading] = useState(false);
   const columns: ColumnDef<test_collectionModel>[] = [
@@ -81,17 +86,23 @@ export default function TestCollections() {
   ];
   useEffect(() => {
     setLoading(true);
-    api('/test-collection', { method: 'GET' })
+    // api('/test-collection', { method: 'GET' })
+    //   .then((res) => {
+    //     setTestCollections(res);
+    //   })
+    //   .catch((err) => {
+    //     toast.error(err);
+    //     console.error('Failed to fetch test cases:', err);
+    //   });
+    api('/test-project', { method: 'GET' })
       .then((res) => {
-        setTestCollections(res);
+        setTestProjects(res);
         setLoading(false);
-      })
-      .catch((err) => {
-        console.error('Failed to fetch test cases:', err);
-        setLoading(false);
+      }).catch((err) => {
+        toast.error(err);
       });
   }, [refresh]);
-
+  console.log(testProjects);
   const triggerRefresh = () => {
     console.log('triggering refresh');
     setRefresh((prev) => !prev);
@@ -135,23 +146,53 @@ export default function TestCollections() {
 
   return (
     <Page title={'Test Collections'}>
+      <DialogCreate
+        buttonText='New collection'
+        dialogDescription='Create a new test collection'
+        dialogTitle='New collection'
+        formFields={formFields}
+        formSchema={formSchema}
+        onCreated={triggerRefresh}
+        submitButtonText='Create'
+        submitHandler={submitHandler} />
 
       {
         loading ?
           (
             <InlineLoader />
           ) : (
-            <DataTable columns={columns} data={testCollections}>
-              <DialogCreate
-                buttonText='New collection'
-                dialogDescription='Create a new test collection'
-                dialogTitle='New collection'
-                formFields={formFields}
-                formSchema={formSchema}
-                onCreated={triggerRefresh}
-                submitButtonText='Create'
-                submitHandler={submitHandler} />
-            </DataTable>
+            // <DataTable columns={columns} data={testCollections} />
+            <div className='py-10'>
+
+              <Input className='border-palette-green' placeholder='search by name' />
+              <div className='flex flex-col '>
+                {/* list of projects */}
+                {
+                  testProjects?.map((project) => {
+                    return (
+                      <div className='font-bold text-slate-600'>{project.name}
+                        <ul className='w-full list-disc'>
+                          {
+                            project.test_collections ? (
+                              project.test_collections.map((collection) => {
+                                return (
+                                  <li className=''>
+                                    {collection.name}
+                                  </li>
+                                );
+                              })
+                            ) : (
+                              <li> No collections</li>
+                            )
+                          }
+                        </ul>
+                      </div>
+                    );
+                  })
+                }
+              </div>
+            </div>
+
           )
 
       }

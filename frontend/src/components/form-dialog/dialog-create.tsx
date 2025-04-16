@@ -82,19 +82,7 @@ export default function CreateProjectDialog<T extends ZodObject<ZodRawShape>>({
     resolver: zodResolver(formSchema)
   })
 
-  const markdown = `A paragraph with *emphasis* and **strong importance**.
 
-  > A block quote with ~strikethrough~ and a URL: https://reactjs.org.
-  
-  * Lists
-  * [ ] todo
-  * [x] done
-  
-  A table:
-  
-  | a | b |
-  | - | - |
-  `
   return (
     <Dialog open={openModal} onOpenChange={(isOpen)=>{
       setOpenModal(isOpen)
@@ -145,9 +133,7 @@ export default function CreateProjectDialog<T extends ZodObject<ZodRawShape>>({
                   )} />
               )
             })}
-            <Markdown remarkPlugins={[remarkGfm]}>
-              {markdown}
-            </Markdown>
+
             <FormMessage>
               {form.formState.errors.root?.formError.message}
             </FormMessage>
